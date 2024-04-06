@@ -139,8 +139,9 @@
   .segmented-control {
     display: flex;
     background-color: #e0e0e0;
-    border-radius: 5px; 
-    padding: 10px;
+    border-radius: 10px; 
+    padding: 3px;
+    align-items: center; 
   }
 
   .segmented-control input[type="radio"] {
@@ -150,7 +151,7 @@
   .segmented-control label {
     flex: 1; 
     text-align: center;
-    padding: 5px;
+    padding: 10px; 
     cursor: pointer; 
     margin-right: 10px;
   }
@@ -158,14 +159,14 @@
   .segmented-control label:hover {
     background-color: white; 
     color: blue; 
-    border-radius: 5px; 
+    border-radius: 10px; 
     border: 1px solid #000000;
   }
 
   .segmented-control input[type="radio"]:checked + label {
     background-color: white; 
     color: blue; 
-    border-radius: 5px; 
+    border-radius: 10px; 
     border-color: black;
     border: 1px solid #000000;
   }
@@ -173,7 +174,7 @@
   .chart-controls select {
     padding: 10px;
     border: 1px solid #dee2e6;
-    border-radius: 5px;
+    border-radius: 10px;
     cursor: pointer;
   }
   

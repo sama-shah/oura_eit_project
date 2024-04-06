@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Patient Dashboard</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="dashboard">
+
+  <header class="dashboard-header">
+    <div class="header-left">
+      <div class="patient-name">
+        <h1>Patient: Sama Shah</h1>
+      </div>
+      <div class="upload-download">
+        <button class="btn" id="">Upload</button>
+        <button class="btn" id="">Download</button>
+      </div>
+    </div>
+    <div class="header-right">
+      <div class="medication-info">
+        <div class="medication-block">
+          <span class="medication-title">MEDICATION</span>
+          <span class="medication-detail">Semaglutide</span>
+        </div>
+        <div class="medication-block">
+          <span class="medication-title">DOSAGE</span>
+          <span class="medication-detail">40 mg</span>
+        </div>
+        <div class="medication-block">
+          <span class="medication-title">FREQUENCY</span>
+          <span class="medication-detail">2 days</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <div class="widgets">
+      <!-- Repeated widget blocks for HR Variability, Sleep Duration, etc -->
+      <div class="widget">
+        <h2 class="widget-title">HR Variability</h2>
+        <p class="widget-value">47 ms</p>
+        <div class="widget-chart-placeholder"></div>
+      </div>
+      <div class="widget">
+        <h2 class="widget-title">Sleep Duration</h2>
+        <p class="widget-value">47 ms</p>
+        <div class="widget-chart-placeholder"></div>
+      </div>
+      <div class="widget">
+        <h2 class="widget-title">Weight</h2>
+        <p class="widget-value">47 ms</p>
+        <div class="widget-chart-placeholder"></div>
+      </div>
+      <div class="widget">
+        <h2 class="widget-title">HR Variability</h2>
+        <p class="widget-value">47 ms</p>
+        <div class="widget-chart-placeholder"></div>
+      </div>
+    </div>
+    
+    <div class="chart-controls">
+        <div class="date-controls">
+            <input type="date" id="start-date" placeholder="Start Date">
+            <input type="date" id="end-date" placeholder="End Date">
+        </div>
+        <div class="interval-slider">
+            <select id="time-interval">
+                <option value="day">Day</option>
+                <option value="week">Week</option>
+                <option value="month" selected>Month</option>
+                <option value="year">Year</option>
+              </select>
+        </div>
+      
+    </div>
+
+    <div class="summary-chart-area">
+      <div class="summary-placeholder">
+        <p>summary</p>
+      </div>
+      <div class="chart-placeholder">
+        <p>main chart</p>
+      </div>
+    </div>
+    
+  </main>
+
+</div>
+
+</body>
+</html>

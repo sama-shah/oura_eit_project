@@ -68,13 +68,13 @@
             <input type="date" id="start-date" placeholder="Start Date">
             <input type="date" id="end-date" placeholder="End Date">
         </div>
-        <div class="interval-slider">
-            <select id="time-interval">
-                <option value="day">Day</option>
-                <option value="week">Week</option>
-                <option value="month" selected>Month</option>
-                <option value="year">Year</option>
-              </select>
+        <div class="segmented-control">
+          <input type="radio" name="segment" id="segment-1" value="option1">
+          <label for="segment-1">Day</label>
+          <input type="radio" name="segment" id="segment-2" value="option2" checked>
+          <label for="segment-2">Week</label>
+          <input type="radio" name="segment" id="segment-3" value="option3">
+          <label for="segment-3">Month</label>
         </div>
       
     </div>

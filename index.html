@@ -4,9 +4,24 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Patient Dashboard</title>
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" type="text/css" href="styles.css" />
+
+
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.16.8/dist/xlsx.full.min.js"
+   integrity="sha256-Ic7HP804IrYks4vUqX1trFF1Nr33RjONeJESZnYxsOY="
+   crossorigin="anonymous"></script>
+   <script src="https://cdn.canvasjs.com/canvasjs.min.js"></script>
+		<script src="p5.min.js"></script>
+
 </head>
 <body>
+
+  <script src="sketch.js"></script>
+
+  <input type="file" class="form-control" id="myFile" />
+  <button type="submit" id="upload-button">
+    Upload
+   </button>
 
 <div class="dashboard">
 
@@ -16,7 +31,12 @@
         <h1>Patient: Sama Shah</h1>
       </div>
       <div class="upload-download">
-        <button class="btn" id="">Upload</button>
+        <!-- <button class="btn" id="">Upload</button> -->
+        <form class="input-group col-4 mb-5">
+          <!-- <input type="file" class="form-control" id="myFile" /> -->
+          <!-- <button type="submit" id="upload-button">
+           Upload
+          </button> -->
         <button class="btn" id="">Download</button>
       </div>
     </div>
@@ -86,8 +106,9 @@
       <div class="summary-placeholder">
         <p>summary</p>
       </div>
-      <div class="chart-placeholder">
-        <p>main chart</p>
+      <div class="chart-placeholder"> 
+        <div id="chartContainer" style="height: 600px; width: 100%;"></div>
+        <!-- <p>main chart</p> -->
       </div>
     </div>
     

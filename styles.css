@@ -231,3 +231,15 @@
     }
   }
   
+  .upload-download {
+    margin-left: 20px; /* Add margin-left to the upload-download section */
+  }
+  
+  .upload-download .btn {
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+    border-radius: 6px;
+  }
+  

@@ -241,4 +241,16 @@
     transition: background-color 0.2s ease-in-out;
     border-radius: 6px;
   }
+
+  .canvasjs-chart .axis { /* Targets the axis labels */
+    font-family: Arial, sans-serif; /* Change font family here */
+    font-size: 14px; /* Change font size here (optional) */
+  }
+  
+  .canvasjs-chart .title { /* Targets the chart title */
+    font-family: Verdana, sans-serif; /* Change font family here */
+    font-size: 16px; /* Change font size here (optional) */
+  }
+  
+  /* Add more selectors targeting other elements like data labels or legend text */
   

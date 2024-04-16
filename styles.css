@@ -204,8 +204,7 @@
     width: calc(75% - 10px);
     text-align: center;
     padding: 50px 0;
-    background-color: #e9ecef;
-    border: 1px solid #dee2e6;
+    background-color: white;
     border-radius: 5px;
   }
   

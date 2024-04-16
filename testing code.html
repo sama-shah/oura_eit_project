@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Segmented Control</title>
+  <style>
+    .segmented-control {
+      display: flex;
+      background-color: #e0e0e0; /* Light gray background */
+      border-radius: 5px; /* Rounded corners */
+      padding: 5px;
+    }
+
+    .segmented-control input[type="radio"] {
+      display: none; /* Hide the radio buttons */
+    }
+
+    .segmented-control label {
+      flex: 1; /* Distribute labels evenly */
+      text-align: center;
+      padding: 5px;
+      cursor: pointer; /* Make labels clickable */
+    }
+
+    .segmented-control label:hover {
+      background-color: #d0d0d0; /* Lighten background on hover */
+    }
+
+    .segmented-control input[type="radio"]:checked + label {
+      background-color: #ccc; /* Change background for selected option */
+    }
+  </style>
+</head>
+<body>
+  <div class="segmented-control">
+    <input type="radio" name="segment" id="segment-1" value="option1">
+    <label for="segment-1">Option 1</label>
+    <input type="radio" name="segment" id="segment-2" value="option2" checked>
+    <label for="segment-2">Option 2</label>
+    <input type="radio" name="segment" id="segment-3" value="option3">
+    <label for="segment-3">Option 3</label>
+  </div>
+</body>
+</html>

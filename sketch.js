@@ -226,14 +226,14 @@ function setup(){
 }
 
 
-function draw(){
-	beginShape();
+// function draw(){
+// 	beginShape();
 	
-	for(var i = 0; i < allDataArray.length; i++){
-		vertex(x,y);
-	}
-	endShape();
-}
+// 	for(var i = 0; i < allDataArray.length; i++){
+// 		vertex(x,y);
+// 	}
+// 	endShape();
+// }
 	
 
 

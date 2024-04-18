@@ -4,11 +4,6 @@
     padding: 0;
     box-sizing: border-box;
   }
-
-  /* div {
-    border: 1px solid red;
-  } */
-
   @font-face {
     font-family: "Open Sans";
     src: url(OpenSans-Regular.ttf);
@@ -60,14 +55,16 @@
     color: #212529;
   }
 
-  input[type="file"] {
-    display: none;
-  }
-  
-  .form-control {
-    border-radius: 6px;
-    padding: 6px 12px;
+  .upload-download .btn {
+    border: none;
+    padding: 10px 20px;
+    margin-left: 10px;
     cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+    border-radius: 6px;
+  }
+
+  #upload {
     background-color: #223AA3;
     color: white;
     font-size: 10pt;
@@ -162,16 +159,30 @@
   .chart-controls {
     display: flex;
     justify-content: flex-end;
-    padding: 20px 0;
+    /* padding: 20px 0; */
     padding-bottom: 0;
-    width: 500px;
+    /* width: 500px; */
     margin: 0.5%;
     margin-left: auto;
     margin-right: 0;
   }
 
   .date-controls {
-
+    /* margin: 3%; */
+    margin-right: 3.5%;
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+  }
+  #start-date{
+    margin-right: 2%;
+  }
+  .label{
+    display: flex;
+    flex-wrap: nowrap;
+    width: 100%;
+    margin-right: 3%;
   }
 
   .segmented-control {

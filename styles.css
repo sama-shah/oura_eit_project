@@ -94,22 +94,35 @@
   
   .widgets {
     display: flex;
+    align-content: flex-start;
     justify-content: space-between;
     margin-bottom: 20px;
   }
   
   .widget {
-    background: #f8f9fa;
-    border: 1px solid #dee2e6;
+    border: 1px solid #BEBEBE;
     padding: 20px;
-    border-radius: 5px;
+    border-radius: 10px;
     width: calc(25% - 10px);
     text-align: left;
+    margin-right: 12px;
+    height: 100px;
+    
+  }
+
+  #add-widget {
+    background-color: #F5F7FA;
+    display: flex;
+    justify-content: center;
+  }
+
+  #add-widget img {
+    width: 26px;
   }
   
   .widget-title {
     font-size: 14px;
-    color: #6c757d;
+    color: #000000;
   }
   
   /* need to change this so it changes color with each kind of data */
@@ -123,10 +136,14 @@
   .widget-chart-placeholder {
     height: 50px;
     width: 40%;
-    background-color: #e9ecef;
     margin-top: 10px;
     margin-left: auto;
     margin-right: 0;
+  }
+
+  .widget-timeframe {
+    color: #6D6D6D;
+    font-size: 10pt;
   }
   
   /* chart controls */

@@ -5,6 +5,10 @@
     box-sizing: border-box;
   }
 
+  /* div {
+    border: 1px solid red;
+  } */
+
   @font-face {
     font-family: "Open Sans";
     src: url(OpenSans-Regular.ttf);
@@ -56,25 +60,18 @@
     color: #212529;
   }
 
-  .upload-download .btn {
-    border: none;
-    padding: 10px 20px;
-    margin-left: 10px;
-    cursor: pointer;
-    transition: background-color 0.2s ease-in-out;
-    border-radius: 6px;
+  input[type="file"] {
+    display: none;
   }
-
-  #upload {
+  
+  .form-control {
+    border-radius: 6px;
+    padding: 6px 12px;
+    cursor: pointer;
     background-color: #223AA3;
     color: white;
-  }
-
-  #download {
-    background-color: white;
-    color: white;
-    border: 2px solid #223AA3;
-    color: #223AA3;
+    font-size: 10pt;
+    padding: 10;
   }
 
   .medication-info {
@@ -117,12 +114,12 @@
   .widget {
     border: 1px solid #BEBEBE;
     padding: 20px;
+    padding-top: 15px;
     border-radius: 10px;
     width: calc(25% - 10px);
     text-align: left;
     margin-right: 12px;
     height: 100px;
-
   }
 
   #add-widget {

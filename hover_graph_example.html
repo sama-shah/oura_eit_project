@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Line Graph with Hover</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
+</head>
+<body>
+  <script>
+    let data = [10, 30, 50, 80, 60, 40, 70]; // Sample data for the line graph
+    let xSpacing, ySpacing;
+    let rectWidth = 50;
+    let rectHeight = 20;
+    let hoveredIndex = -1;
+
+    function setup() {
+      createCanvas(600, 400);
+      xSpacing = width / (data.length - 1);
+      ySpacing = height / 100;
+    }
+
+    function draw() {
+      background(255);
+      
+      // Draw line graph
+      stroke(0);
+      strokeWeight(2);
+      for (let i = 0; i < data.length - 1; i++) {
+        line(i * xSpacing, height - data[i] * ySpacing, (i + 1) * xSpacing, height - data[i + 1] * ySpacing);
+      }
+
+      // Draw pop-up rectangle if hovered over a point
+      if (hoveredIndex !== -1) {
+        let x = hoveredIndex * xSpacing;
+        let y = height - data[hoveredIndex] * ySpacing - rectHeight - 5;
+        fill(200);
+        rect(x, y, rectWidth, rectHeight);
+        fill(0);
+        text(data[hoveredIndex], x + rectWidth / 2, y + rectHeight / 2);
+      }
+    }
+
+    function mouseMoved() {
+      // Check if mouse is over any point on the graph
+      for (let i = 0; i < data.length; i++) {
+        let x = i * xSpacing;
+        let y = height - data[i] * ySpacing;
+        if (dist(mouseX, mouseY, x, y) < 10) { // 10 is the hover threshold
+          hoveredIndex = i;
+          return;
+        }
+      }
+      hoveredIndex = -1; // Reset if not hovering over any point
+    }
+  </script>
+</body>
+</html>

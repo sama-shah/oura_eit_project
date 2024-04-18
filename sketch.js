@@ -3,13 +3,32 @@ let weightFile;
 let allData = {};
 let allDataArray = [];
 
-// Get the selected file when input changes
-document.getElementById("sleepperiods").addEventListener("change", (event) => {
-	sleepPeriodsFile = event.target.files[0];
+// // Get the selected file when input changes
+// document.getElementById("sleepperiods").addEventListener("change", (event) => {
+// 	sleepPeriodsFile = event.target.files[0];
+// });
+// document.getElementById("weight").addEventListener("change", (event) => {
+// 	weightFile = event.target.files[0];
+// });
+const sleepPeriodsInput = document.getElementById("sleepperiods");
+const weightInput = document.getElementById("weight");
+
+sleepPeriodsInput.addEventListener("change", (event) => {
+  if (event.target.files.length > 0) {
+    sleepPeriodsFile = event.target.files[0];
+  } else {
+    sleepPeriodsFile = null;
+  }
 });
-document.getElementById("weight").addEventListener("change", (event) => {
-	weightFile = event.target.files[0];
+
+weightInput.addEventListener("change", (event) => {
+  if (event.target.files.length > 0) {
+    weightFile = event.target.files[0];
+  } else {
+    weightFile = null;
+  }
 });
+
 //arrays of our axis
 var dates = [];
 var HRV = [];
@@ -90,8 +109,8 @@ document.getElementById("upload-button").addEventListener("click", (e) => {
 					if(result[i].day in allData){
 						var entry = allData[result[i].day];
 						entry.weight = result[i].weight_lbs;
-						
-						
+
+
 					}
 
 				}
@@ -219,25 +238,100 @@ class DataEntry {
 
 //drawing the graph
 
-function setup(){
+// function setup(){
 
-	draw();
+// 	draw();
 
-}
+// }
 
 
 // function draw(){
 // 	beginShape();
-	
+
 // 	for(var i = 0; i < allDataArray.length; i++){
 // 		vertex(x,y);
 // 	}
 // 	endShape();
 // }
-	
 
+let canvas;
 
+function setup() {
+  var canvas = createCanvas(800, 600);
+  canvas.parent("main-chart-sketch");
+  noLoop();
+}
 
+function draw() {
+  background(255);
+  stroke(0);
+  strokeWeight(2);
 
+  // Determine the min and max values for x and y axes
+  let minX = min(allDataArray.map(entry => entry.date.getTime()));
+  let maxX = max(allDataArray.map(entry => entry.date.getTime()));
+  let minY = min(allDataArray.map(entry => min(entry.deep, entry.light, entry.hrv)));
+  let maxY = max(allDataArray.map(entry => max(entry.deep, entry.light, entry.hrv)));
 
+  // Map data points to canvas coordinates
+  let mapX = scaleLinear()
+    .domain([minX, maxX])
+    .range([50, width - 50]);
 
+  let mapY = scaleLinear()
+    .domain([minY, maxY])
+    .range([height - 50, 50]);
+
+  // Draw x and y axes
+  line(50, height - 50, width - 50, height - 50);
+  line(50, height - 50, 50, 50);
+
+  // Draw data points
+  for (let entry of allDataArray) {
+    let x = mapX(entry.date.getTime());
+    let y = mapY(entry.hrv);
+    point(x, y);
+  }
+}
+
+// Helper function to find the minimum value in an array
+function min(arr) {
+  return Math.min(...arr.filter(value => !isNaN(value)));
+}
+
+// Helper function to find the maximum value in an array
+function max(arr) {
+  return Math.max(...arr.filter(value => !isNaN(value)));
+}
+
+// Helper function for linear scaling
+function scaleLinear() {
+  let domain = [0, 1];
+  let range = [0, 1];
+  let clamp = false;
+
+  function scale(x) {
+    let res = range[0] + (x - domain[0]) * (range[1] - range[0]) / (domain[1] - domain[0]);
+    return clamp ? Math.min(range[1], Math.max(range[0], res)) : res;
+  }
+
+  scale.domain = function(x) {
+    if (!arguments.length) return domain;
+    domain = x.map(Number);
+    return scale;
+  }
+
+  scale.range = function(x) {
+    if (!arguments.length) return range;
+    range = x.map(Number);
+    return scale;
+  }
+
+  scale.clamp = function(x) {
+    if (!arguments.length) return clamp;
+    clamp = x;
+    return scale;
+  }
+
+  return scale;
+}

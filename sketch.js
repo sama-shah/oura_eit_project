@@ -90,8 +90,8 @@ document.getElementById("upload-button").addEventListener("click", (e) => {
 					if(result[i].day in allData){
 						var entry = allData[result[i].day];
 						entry.weight = result[i].weight_lbs;
-						
-						
+
+
 					}
 
 				}
@@ -218,26 +218,144 @@ class DataEntry {
 
 
 //drawing the graph
-
-function setup(){
-
-	draw();
-
-}
-
+// function setup(){
+// 	draw();
+// }
 
 // function draw(){
 // 	beginShape();
-	
 // 	for(var i = 0; i < allDataArray.length; i++){
 // 		vertex(x,y);
 // 	}
 // 	endShape();
 // }
-	
+
+function setup() {
+	var canvas = createCanvas(800, 400);
+	canvas.parent("main-sketch-area");
+	frameRate(60);
+	noLoop();
+}
+
+function draw() {
+	background(255);
+
+	stroke(128, 128, 128);
+	strokeWeight(2);
+	//x axis
+	line(90, height - 50, width - 50, height - 50);
+	// x aixs label
+	stroke(128, 128, 128);
+	strokeWeight(1);
+	textSize(16);
+	textAlign(CENTER, TOP);
+	text("x-axis label", width / 2, height - 20);
+
+	//y axis 1
+	stroke(128, 128, 128);
+	strokeWeight(2);
+	line(40, height - 50, 40, 50);
+	// y axis 1 label
+	stroke(128, 128, 128);
+	strokeWeight(1);
+	push();
+	translate(15, height / 2);
+	rotate(-HALF_PI);
+	text("y-axis label 1", 0, 0);
+	pop();
+
+	stroke(128, 128, 128);
+	strokeWeight(2);
+	//y axis 2
+	line(90, height - 50, 90, 50);
+	//y 2 label
+	stroke(128, 128, 128);
+	strokeWeight(1);
+	push();
+	translate(65, height / 2);
+	rotate(-HALF_PI);
+	text("y-axis label 2", 0, 0);
+	pop();
+
+	//y axis 3 (on right)
+	stroke(128, 128, 128);
+	strokeWeight(2);
+	line(750, height - 50, 750, 50);
+	//y 3 label
+	stroke(128, 128, 128);
+	strokeWeight(1);
+	push();
+	translate(765, height / 2);
+	rotate(-HALF_PI);
+	text("y-axis label 3", 0, 0);
+	pop();
 
 
+	// determine the min and max values for x and y axes
+	let minX = min(allDataArray.map(entry => entry.date.getTime()));
+	let maxX = max(allDataArray.map(entry => entry.date.getTime()));
+	let minY = min(allDataArray.map(entry => min(entry.deep, entry.light, entry.hrv)));
+	let maxY = max(allDataArray.map(entry => max(entry.deep, entry.light, entry.hrv)));
 
+	// map data points to canvas coordinates
+	let mapX = scaleLinear()
+	  .domain([minX, maxX])
+	  .range([50, width - 50]);
 
+	let mapY = scaleLinear()
+	  .domain([minY, maxY])
+	  .range([height - 50, 50]);
 
+	// draw x and y axes
+	// line(50, height - 50, width - 50, height - 50);
+	// line(50, height - 50, 50, 50);
 
+	// draw data points
+	for (let entry of allDataArray) {
+	  let x = mapX(entry.date.getTime());
+	  let y = mapY(entry.hrv);
+	  point(x, y);
+	}
+  }
+
+  // function to find the minimum value in an array
+  function min(arr) {
+	return Math.min(...arr.filter(value => !isNaN(value)));
+  }
+
+  // function to find the maximum value in an array
+  function max(arr) {
+	return Math.max(...arr.filter(value => !isNaN(value)));
+  }
+
+  // Helper function for linear scaling
+function scaleLinear() {
+	let domain = [0, 1];
+	let range = [0, 1];
+	let clamp = false;
+
+	function scale(x) {
+	  let res = range[0] + (x - domain[0]) * (range[1] - range[0]) / (domain[1] - domain[0]);
+	  return clamp ? Math.min(range[1], Math.max(range[0], res)) : res;
+	}
+
+	scale.domain = function(x) {
+	  if (!arguments.length) return domain;
+	  domain = x.map(Number);
+	  return scale;
+	}
+
+	scale.range = function(x) {
+	  if (!arguments.length) return range;
+	  range = x.map(Number);
+	  return scale;
+	}
+
+	scale.clamp = function(x) {
+	  if (!arguments.length) return clamp;
+	  clamp = x;
+	  return scale;
+	}
+
+	return scale;
+  }

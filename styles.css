@@ -5,9 +5,22 @@
     box-sizing: border-box;
   }
 
+  @font-face {
+    font-family: "Open Sans";
+    src: url(OpenSans-Regular.ttf);
+  }
+  @font-face {
+    font-family: "Open Sans Bold";
+    src: url(OpenSans-Bold.ttf);
+  }
+  @font-face {
+    font-family: "Open Sans Light";
+    src: url(OpenSans-Light.ttf);
+  }
+
   body, html {
     height: 100%;
-    font-family: 'Arial', sans-serif;
+    font-family: 'Open Sans', 'Arial', sans-serif;
     background-color: #ffffff;
   }
 
@@ -107,7 +120,7 @@
     text-align: left;
     margin-right: 12px;
     height: 100px;
-    
+
   }
 
   #add-widget {

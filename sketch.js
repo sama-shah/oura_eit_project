@@ -87,7 +87,7 @@ document.getElementById("upload-button").addEventListener("click", (e) => {
 					var dateArray = result[i].day.split("/");
 					var dateObject = new Date(dateArray);
 					//console.log(result[i]);
-					if(result[i].day in allData){
+					if (result[i].day in allData) {
 						var entry = allData[result[i].day];
 						entry.weight = result[i].weight_lbs;
 
@@ -95,7 +95,8 @@ document.getElementById("upload-button").addEventListener("click", (e) => {
 					}
 
 				}
-				 console.log(allDataArray);
+				console.log(allDataArray);
+				draw();
 			});
 
 
@@ -124,80 +125,7 @@ document.getElementById("upload-button").addEventListener("click", (e) => {
 				});
 			}
 
-			var chart = new CanvasJS.Chart("chartContainer", {
-				title: {
-					text: "Oura HRV, Sleep Chart"
-				},
-				axisY: [{
-					title: "Deep Sleep",
-					lineColor: "#C24642",
-					tickColor: "#C24642",
-					labelFontColor: "#C24642",
-					titleFontColor: "#C24642",
-					includeZero: true,
-					suffix: "",
-				},
-				{
-					title: "HRV",
-					lineColor: "#369EAD",
-					tickColor: "#369EAD",
-					labelFontColor: "#369EAD",
-					titleFontColor: "#369EAD",
-					includeZero: true,
-					suffix: ""
-				}],
-				axisY2: {
-					title: "Light Sleep",
-					lineColor: "#7F6084",
-					tickColor: "#7F6084",
-					labelFontColor: "#7F6084",
-					titleFontColor: "#7F6084",
-					includeZero: true,
-					prefix: "",
-					suffix: ""
-				},
-				toolTip: {
-					shared: true
-				},
-				legend: {
-					cursor: "pointer",
-					itemclick: toggleDataSeries
-				},
-				data: [{
-					type: "line",
-					name: "HRV",
-					color: "#369EAD",
-					showInLegend: true,
-					axisYIndex: 1,
-					dataPoints: AVGHRV
-				},
-				{
-					type: "line",
-					name: "Deep Sleep",
-					color: "#C24642",
-					axisYIndex: 0,
-					showInLegend: true,
-					dataPoints: AVGDEEP
-				},
-				{
-					type: "line",
-					name: "Light Sleep",
-					color: "#7F6084",
-					axisYType: "secondary",
-					showInLegend: true,
-					dataPoints: AVGLIGHT
-				}]
-			});
-			chart.render();
 
-			function toggleDataSeries(e) {
-				if (typeof (e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
-					e.dataSeries.visible = false;
-				} else {
-					e.dataSeries.visible = true;
-				}
-				e.chart.render();
-			}
 		};
 
 	};
@@ -213,6 +141,17 @@ class DataEntry {
 		this.awake = awake;
 		this.hrv = hrv;
 	}
+
+	getDate() {
+		return this.date;
+	}
+	getHRV() {
+		return this.hrv;
+	}
+	getSleep(){
+		return parseInt(this.deep) + parseInt(this.light) + parseInt(this.rem) + parseInt(this.awake);
+	}
+
 }
 
 
@@ -243,13 +182,16 @@ function draw() {
 	stroke(128, 128, 128);
 	strokeWeight(2);
 	//x axis
+
+	//starts at x = 90
+
 	line(90, height - 50, width - 50, height - 50);
 	// x aixs label
 	stroke(128, 128, 128);
 	strokeWeight(1);
 	textSize(16);
 	textAlign(CENTER, TOP);
-	text("x-axis label", width / 2, height - 20);
+	text("date", width / 2, height - 20);
 
 	//y axis 1
 	stroke(128, 128, 128);
@@ -259,9 +201,9 @@ function draw() {
 	stroke(128, 128, 128);
 	strokeWeight(1);
 	push();
-	translate(15, height / 2);
+	translate(0, height / 2);
 	rotate(-HALF_PI);
-	text("y-axis label 1", 0, 0);
+	text("HRV", 0, 0);
 	pop();
 
 	stroke(128, 128, 128);
@@ -274,7 +216,7 @@ function draw() {
 	push();
 	translate(65, height / 2);
 	rotate(-HALF_PI);
-	text("y-axis label 2", 0, 0);
+	text("Weight", 0, -16);
 	pop();
 
 	//y axis 3 (on right)
@@ -285,10 +227,111 @@ function draw() {
 	stroke(128, 128, 128);
 	strokeWeight(1);
 	push();
-	translate(765, height / 2);
+	translate(785, height / 2);
 	rotate(-HALF_PI);
-	text("y-axis label 3", 0, 0);
+	text("Sleep", 0, 0);
 	pop();
+
+	console.log(allDataArray.length);
+	//placing the date x axis
+	//rotate(45);
+	textAlign(LEFT, TOP);
+	textSize(7);
+	for (var i = 0; i < allDataArray.length; i++) {
+		push();
+		translate(95 + ((width - 50 - 90) / allDataArray.length) * i, height - 50);
+		rotate(QUARTER_PI);
+		text((allDataArray[i].getDate().getMonth()) + 1 + "/" + (allDataArray[i].getDate().getDate()) + "/" + (allDataArray[i].getDate().getFullYear()), 0, 0);
+		//console.log(allDataArray[i].getDate());
+		//console.log(90 + ((width - 50-90)/allDataArray.length)*i);
+		pop();
+	}
+
+
+	//figruing out the min max of HRV
+
+
+	var hrvMax = parseInt(allDataArray[0].getHRV());
+	var hrvMin = parseInt(allDataArray[0].getHRV());
+
+	for (var i = 0; i < allDataArray.length; i++) {
+		var currentHRV = parseInt(allDataArray[i].getHRV());
+		if (currentHRV < hrvMin) {
+			hrvMin = currentHRV;
+			
+		}
+		if (currentHRV > hrvMax) {
+			hrvMax = currentHRV;
+			
+		}
+	}
+
+	var hrvRange = hrvMax - hrvMin+1;
+	console.log("range: "+ hrvRange);
+	//placing the y axis
+	//line(40, height - 50, 40, 50);
+	for (var i = 0; i < hrvRange; i++) {
+		push();
+		translate(0, height - 50 - ((height-100)/hrvRange)*i);
+		line(30, 0, 40, 0);
+		text(hrvMin + i, 20,-3);
+		console.log(hrvMin + i);
+		pop();
+	}
+	//draw weight data points 
+	for (var i = 0; i < allDataArray.length; i++) {
+		push();
+		circle(95 + ((width - 50 - 90) / allDataArray.length) * i,  (((height-100)/hrvRange)*(parseInt(allDataArray[i].getHRV())-hrvMin))-50 , 5);
+		pop();
+	}
+	// for(var i = 0 ; i < allDataArray.length ; i++){
+	// 	circle(((width - 50-90)/allDataArray.length), allDataArray[i].getHRV(),10);
+	// }
+
+	var weightMax = parseInt(allDataArray[0].weight);
+	var weightMin = parseInt(allDataArray[0].weight);
+
+	for (var i = 0; i < allDataArray.length; i++) {
+		var currentWeight = parseInt(allDataArray[i].weight);
+		if (currentWeight < weightMin) {
+			weightMin = currentWeight;
+			
+		}
+		if (currentWeight > weightMax) {
+			weightMax = currentWeight;
+			
+		}
+	}
+	var weightRange = weightMax- weightMin +1;
+	console.log("weight range"+ weightRange);
+	for (var i = 0; i < weightRange; i++) {
+		push();
+		translate(0, height - 50 - ((height-100)/weightRange)*i);
+		line(80, 0, 90, 0);
+		text(weightMin + i, 70,-3);
+
+		pop();
+	}
+
+	var sleepMax = parseInt(allDataArray[0].getSleep());
+
+	for (var i = 0; i < allDataArray.length; i++) {
+		var currentSleep = parseInt(allDataArray[i].getSleep());
+		if (currentSleep > sleepMax) {
+			sleepMax = currentSleep;
+		}
+	}
+
+	console.log("sleep max" + sleepMax);
+
+	for (var i = 0; i < sleepMax/2000; i++) {
+		push();
+		translate(0, height - 50 - ((height-100)/(sleepMax/2000))*i);
+		line(750, 0, 760, 0);
+		text(i*2+"00", 765,-3);
+		pop();
+	}
+	
 
 
 	// determine the min and max values for x and y axes
@@ -299,63 +342,63 @@ function draw() {
 
 	// map data points to canvas coordinates
 	let mapX = scaleLinear()
-	  .domain([minX, maxX])
-	  .range([50, width - 50]);
+		.domain([minX, maxX])
+		.range([50, width - 50]);
 
 	let mapY = scaleLinear()
-	  .domain([minY, maxY])
-	  .range([height - 50, 50]);
+		.domain([minY, maxY])
+		.range([height - 50, 50]);
 
 	// draw x and y axes
 	// line(50, height - 50, width - 50, height - 50);
 	// line(50, height - 50, 50, 50);
 
-	// draw data points
+	// draw data points of HRV
 	for (let entry of allDataArray) {
-	  let x = mapX(entry.date.getTime());
-	  let y = mapY(entry.hrv);
-	  point(x, y);
+		let x = mapX(entry.date.getTime());
+		let y = mapY(entry.hrv);
+		point(x, y);
 	}
-  }
+}
 
-  // function to find the minimum value in an array
-  function min(arr) {
+// function to find the minimum value in an array
+function min(arr) {
 	return Math.min(...arr.filter(value => !isNaN(value)));
-  }
+}
 
-  // function to find the maximum value in an array
-  function max(arr) {
+// function to find the maximum value in an array
+function max(arr) {
 	return Math.max(...arr.filter(value => !isNaN(value)));
-  }
+}
 
-  // Helper function for linear scaling
+// Helper function for linear scaling
 function scaleLinear() {
 	let domain = [0, 1];
 	let range = [0, 1];
 	let clamp = false;
 
 	function scale(x) {
-	  let res = range[0] + (x - domain[0]) * (range[1] - range[0]) / (domain[1] - domain[0]);
-	  return clamp ? Math.min(range[1], Math.max(range[0], res)) : res;
+		let res = range[0] + (x - domain[0]) * (range[1] - range[0]) / (domain[1] - domain[0]);
+		return clamp ? Math.min(range[1], Math.max(range[0], res)) : res;
 	}
 
-	scale.domain = function(x) {
-	  if (!arguments.length) return domain;
-	  domain = x.map(Number);
-	  return scale;
+	scale.domain = function (x) {
+		if (!arguments.length) return domain;
+		domain = x.map(Number);
+		return scale;
 	}
 
-	scale.range = function(x) {
-	  if (!arguments.length) return range;
-	  range = x.map(Number);
-	  return scale;
+	scale.range = function (x) {
+		if (!arguments.length) return range;
+		range = x.map(Number);
+		return scale;
 	}
 
-	scale.clamp = function(x) {
-	  if (!arguments.length) return clamp;
-	  clamp = x;
-	  return scale;
+	scale.clamp = function (x) {
+		if (!arguments.length) return clamp;
+		clamp = x;
+		return scale;
 	}
 
 	return scale;
-  }
+}

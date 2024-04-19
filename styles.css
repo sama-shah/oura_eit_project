@@ -4,6 +4,9 @@
     padding: 0;
     box-sizing: border-box;
   }
+
+
+
   @font-face {
     font-family: "Open Sans";
     src: url(OpenSans-Regular.ttf);
@@ -55,20 +58,19 @@
     color: #212529;
   }
 
-  .upload-download .btn {
-    border: none;
-    padding: 10px 20px;
-    margin-left: 10px;
-    cursor: pointer;
-    transition: background-color 0.2s ease-in-out;
-    border-radius: 6px;
+  input[type="file"] {
+    display: none;
   }
-
-  #upload {
+  
+  .form-control {
+    border: 1px solid #ccc;
+    display: inline-block;
+    padding: 6px 12px;
+    cursor: pointer;
+    border-radius: 6px;
     background-color: #223AA3;
     color: white;
-    font-size: 10pt;
-    padding: 10;
+    font-size: 12px;
   }
 
   .medication-info {
@@ -111,12 +113,14 @@
   .widget {
     border: 1px solid #BEBEBE;
     padding: 20px;
-    padding-top: 15px;
+    padding-top: 10px;
     border-radius: 10px;
     width: calc(25% - 10px);
     text-align: left;
     margin-right: 12px;
     height: 100px;
+    display: flex;
+    
   }
 
   #add-widget {
@@ -136,9 +140,10 @@
 
   /* need to change this so it changes color with each kind of data */
   .widget-value {
-    font-size: 25px;
+    font-size: 30px;
     color: #28a745;
     font-weight: bold;
+    margin-top: 2px;
   }
 
   /* either js or placeholder images */
@@ -154,6 +159,24 @@
     color: #6D6D6D;
     font-size: 10pt;
   }
+
+  .delete {
+    margin-bottom: 42px;
+  }
+
+  .eye {
+    margin-left: 5px;
+  }
+
+  .right-widget-images {
+    width: 20px;
+    height: 90px;
+    margin-top: 2px;
+    margin-right: -15px;
+    margin-left: auto
+  }
+
+
 
   /* chart controls */
   .chart-controls {

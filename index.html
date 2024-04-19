@@ -1,109 +1,162 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Patient Dashboard</title>
   <link rel="stylesheet" href="styles.css">
-  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.16.8/dist/xlsx.full.min.js" integrity="sha256-Ic7HP804IrYks4vUqX1trFF1Nr33RjONeJESZnYxsOY=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.16.8/dist/xlsx.full.min.js"
+    integrity="sha256-Ic7HP804IrYks4vUqX1trFF1Nr33RjONeJESZnYxsOY=" crossorigin="anonymous"></script>
   <script src="https://cdn.canvasjs.com/canvasjs.min.js"></script>
   <script src="p5.min.js"></script>
-</head
+</head>
+
 <body>
 
-<div class="dashboard">
+  <div class="dashboard">
 
-  <header class="dashboard-header">
-    <div class="header-left">
-      <div class="patient-name">
-        <h1>Patient: Sama Shah</h1>
-      </div>
-      <div class="upload-download">
-        <form class="input-group col-4 mb-5">
-          <input type="file" class="form-control" id="sleepperiods" />
-          <input type="file" class="form-control" id="weight" />
-          <button class="btn ml-2" type="submit" id="upload-button">
-            Upload
-          </button>
-        </form>
-      </div>
-    </div>
-    <div class="header-right">
-      <div class="medication-info">
-        <div class="medication-block">
-          <span class="medication-title">MEDICATION</span>
-          <br>
-          <span class="medication-detail">Semaglutide</span>
+    <header class="dashboard-header">
+      <div class="header-left">
+        <div class="patient-name">
+          <h1>Patient: Sama Shah</h1>
         </div>
-        <div class="medication-block">
-          <span class="medication-title">DOSAGE</span>
-          <br>
-          <span class="medication-detail">40 mg</span>
-        </div>
-        <div class="medication-block">
-          <span class="medication-title">FREQUENCY</span>
-          <br>
-          <span class="medication-detail">2 days</span>
+        <div class="upload-download">
+          <form class="input-group col-4 mb-5">
+            <label for="upload1" class="form-control">Upload File 1</label>
+            <input type="file" id="upload1" />
+            <label for="upload2" class="form-control">Upload File 2</label>
+            <input type="file" id="upload2" />
+          </form>
         </div>
       </div>
-    </div>
-  </header>
+      <div class="header-right">
+        <div class="medication-info">
+          <div class="medication-block">
+            <span class="medication-title">MEDICATION</span>
+            <br>
+            <span class="medication-detail">Semaglutide</span>
+          </div>
+          <div class="medication-block">
+            <span class="medication-title">DOSAGE</span>
+            <br>
+            <span class="medication-detail">40 mg</span>
+          </div>
+          <div class="medication-block">
+            <span class="medication-title">FREQUENCY</span>
+            <br>
+            <span class="medication-detail">2 days</span>
+          </div>
+        </div>
+      </div>
+    </header>
+    <main class="main-content">
+      <div class="widgets">
+        <!-- Repeated widget blocks for HR Variability, Sleep Duration, etc -->
+        <div class="widget" id="add-widget">
+          <img src="plus.svg" alt="plus symbol">
+        </div>
+        <div class="widget">
+          <div class="widget-text">
+            <h2 class="widget-title">HR Variability</h2>
+            <p class="widget-value">47 ms</p>
+            <p class="widget-timeframe">ON AVERAGE</p>
+          </div>
+          <div class="eye">
+            <img  src="sight-toggle-on">
+          </div>
+          <div class="right-widget-images">
+            <img class="delete" src="delete.svg">
+            <img class="drop-down" src="drop-down-arrow.svg">
+          </div>
+          <!-- <div class="widget-chart-placeholder"></div> -->
+        </div>
+        <div class="widget">
+          <div class="widget-text">
+            <h2 class="widget-title">Sleep Duration</h2>
+            <p class="widget-value">47 ms</p>
+            <p class="widget-timeframe">ON AVERAGE</p>
+            <!-- <div class="widget-chart-placeholder"></div> -->
+          </div>
+          <div class="eye">
+            <img  src="sight-toggle-on">
+          </div>
+          <div class="right-widget-images">
+            <img class="delete" src="delete.svg">
+            <img class="drop-down" src="drop-down-arrow.svg">
+          </div>
+        </div>
+        <div class="widget">
+          <div class="widget-text">
+            <h2 class="widget-title">Weight</h2>
+            <p class="widget-value">47 ms</p>
+            <p class="widget-timeframe">ON AVERAGE</p>
+            <!-- <div class="widget-chart-placeholder"></div> -->
+          </div>
+          <div class="eye">
+            <img  src="sight-toggle-on">
+          </div>
+          <div class="right-widget-images">
+            <img class="delete" src="delete.svg">
+            <img class="drop-down" src="drop-down-arrow.svg">
+          </div>
+        </div>
+        <div class="widget">
+          <div class="widget-text">
+            <h2 class="widget-title">HR Variability</h2>
+            <p class="widget-value">47 ms</p>
+            <p class="widget-timeframe">ON AVERAGE</p>
+            <!-- <div class="widget-chart-placeholder"></div> -->
+          </div>
+          <div class="eye">
+            <img  src="sight-toggle-on">
+          </div>
+          <div class="right-widget-images">
+            <img class="delete" src="delete.svg">
+            <img class="drop-down" src="drop-down-arrow.svg">
+          </div>
+        </div>
+        <img src="next-arrow.svg" alt="next arrow symbol">
+      </div>
 
-  <main class="main-content">
-    <div class="widgets">
-      <!-- Repeated widget blocks for HR Variability, Sleep Duration, etc -->
-      <div class="widget">
-        <h2 class="widget-title">HR Variability</h2>
-        <p class="widget-value">47 ms</p>
-      </div>
-      <div class="widget">
-        <h2 class="widget-title">Sleep Duration</h2>
-        <p class="widget-value">47 ms</p>
-      </div>
-      <div class="widget">
-        <h2 class="widget-title">Weight</h2>
-        <p class="widget-value">47 ms</p>
-      </div>
-      <div class="widget">
-        <h2 class="widget-title">HR Variability</h2>
-        <p class="widget-value">47 ms</p>
-      </div>
-    </div>
+      <div class="chart-controls">
 
-    <div class="chart-controls">
         <div class="date-controls">
-            <input type="date" id="start-date" placeholder="Start Date">
-            <input type="date" id="end-date" placeholder="End Date">
+          <label for="start-date"><span class="label">Start Date&nbsp;&nbsp;</span></label>
+          <input type="date" id="start-date" placeholder="Start Date">
+          <label for="end-date"><span class="label">End Date&nbsp;&nbsp;</span></label>
+          <input type="date" id="end-date" placeholder="End Date">
         </div>
-        <div class="segmented-control">
+        <!-- <div class="segmented-control">
           <input type="radio" name="segment" id="segment-1" value="option1">
           <label for="segment-1">Day</label>
           <input type="radio" name="segment" id="segment-2" value="option2" checked>
           <label for="segment-2">Week</label>
           <input type="radio" name="segment" id="segment-3" value="option3">
           <label for="segment-3">Month</label>
-        </div>
-    </div>
-
-    <div class="graph-area">
-
-      <div class="summary-chart-area">
-        <div class="summary-placeholder">
-          <h3>summary</h3>
-        </div>
+        </div> -->
       </div>
 
-      <div id="main-sketch-area" class="main-sketch-area">
+      <div class="graph-area">
+
+        <div class="summary-chart-area">
+          <div class="summary-placeholder">
+            <h3>summary</h3>
+          </div>
+        </div>
+
+        <div id="main-sketch-area" class="main-sketch-area">
+        </div>
+
       </div>
+    </main>
 
-    </div>
-  </main>
+  </div>
 
-</div>
-
-<!-- Include your script -->
-<script src="sketch.js"></script>
+  <!-- Include your script -->
+  <script src="sketch.js"></script>
 
 
 </body>
+
 </html>

@@ -140,7 +140,7 @@
 
   /* need to change this so it changes color with each kind of data */
   .widget-value {
-    font-size: 30px;
+    font-size: 150%;
     color: #28a745;
     font-weight: bold;
     margin-top: 2px;
@@ -157,7 +157,7 @@
 
   .widget-timeframe {
     color: #6D6D6D;
-    font-size: 10pt;
+    font-size: 70%;
   }
 
   .delete {
@@ -176,7 +176,13 @@
     margin-left: auto
   }
 
-
+  .nextarrow-widget-images {
+    width: 20px;
+    height: 90px;
+    justify-content: center;
+    right: 0;
+    align-items: center;
+  }
 
   /* chart controls */
   .chart-controls {

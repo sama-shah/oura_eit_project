@@ -4,12 +4,13 @@ let allData = {};
 let allDataArray = [];
 
 // Get the selected file when input changes
-document.getElementById("sleepperiods").addEventListener("change", (event) => {
-	sleepPeriodsFile = event.target.files[0];
-});
-document.getElementById("weight").addEventListener("change", (event) => {
-	weightFile = event.target.files[0];
-});
+// document.getElementById("sleepperiods").addEventListener("change", (event) => {
+// 	sleepPeriodsFile = event.target.files[0];
+// });
+// document.getElementById("weight").addEventListener("change", (event) => {
+// 	weightFile = event.target.files[0];
+// });
+
 //arrays of our axis
 var dates = [];
 var HRV = [];
@@ -19,9 +20,16 @@ var weight = [];
 
 
 // Handle upload button click
-document.getElementById("upload1").addEventListener("click", (e) => {
+document.getElementById("upload-button1").addEventListener("click", (e) => {
 	e.preventDefault();
 
+	const sleepPeriodsFile = document.getElementById("upload1").files[0];
+	const weightFile = document.getElementById("upload2").files[0];
+
+	if (!sleepPeriodsFile || !weightFile) {
+		console.error("Please select both files before uploading.");
+		return;
+	}
 	let fileReader = new FileReader();
 
 	// Read the selected file as binary string
@@ -148,7 +156,7 @@ class DataEntry {
 	getHRV() {
 		return this.hrv;
 	}
-	getSleep(){
+	getSleep() {
 		return parseInt(this.deep) + parseInt(this.light) + parseInt(this.rem) + parseInt(this.awake);
 	}
 
@@ -258,30 +266,30 @@ function draw() {
 		var currentHRV = parseInt(allDataArray[i].getHRV());
 		if (currentHRV < hrvMin) {
 			hrvMin = currentHRV;
-			
+
 		}
 		if (currentHRV > hrvMax) {
 			hrvMax = currentHRV;
-			
+
 		}
 	}
 
-	var hrvRange = hrvMax - hrvMin+1;
-	console.log("range: "+ hrvRange);
+	var hrvRange = hrvMax - hrvMin + 1;
+	console.log("range: " + hrvRange);
 	//placing the y axis
 	//line(40, height - 50, 40, 50);
 	for (var i = 0; i < hrvRange; i++) {
 		push();
-		translate(0, height - 50 - ((height-100)/hrvRange)*i);
+		translate(0, height - 50 - ((height - 100) / hrvRange) * i);
 		line(30, 0, 40, 0);
-		text(hrvMin + i, 20,-3);
+		text(hrvMin + i, 20, -3);
 		console.log(hrvMin + i);
 		pop();
 	}
 	//draw weight data points 
 	for (var i = 0; i < allDataArray.length; i++) {
 		push();
-		circle(95 + ((width - 50 - 90) / allDataArray.length) * i,  (((height-100)/hrvRange)*(parseInt(allDataArray[i].getHRV())-hrvMin))-50 , 5);
+		circle(95 + ((width - 50 - 90) / allDataArray.length) * i, (((height - 100) / hrvRange) * (parseInt(allDataArray[i].getHRV()) - hrvMin)) - 50, 5);
 		pop();
 	}
 	// for(var i = 0 ; i < allDataArray.length ; i++){
@@ -295,20 +303,20 @@ function draw() {
 		var currentWeight = parseInt(allDataArray[i].weight);
 		if (currentWeight < weightMin) {
 			weightMin = currentWeight;
-			
+
 		}
 		if (currentWeight > weightMax) {
 			weightMax = currentWeight;
-			
+
 		}
 	}
-	var weightRange = weightMax- weightMin +1;
-	console.log("weight range"+ weightRange);
+	var weightRange = weightMax - weightMin + 1;
+	console.log("weight range" + weightRange);
 	for (var i = 0; i < weightRange; i++) {
 		push();
-		translate(0, height - 50 - ((height-100)/weightRange)*i);
+		translate(0, height - 50 - ((height - 100) / weightRange) * i);
 		line(80, 0, 90, 0);
-		text(weightMin + i, 70,-3);
+		text(weightMin + i, 70, -3);
 
 		pop();
 	}
@@ -324,14 +332,14 @@ function draw() {
 
 	console.log("sleep max" + sleepMax);
 
-	for (var i = 0; i < sleepMax/2000; i++) {
+	for (var i = 0; i < sleepMax / 2000; i++) {
 		push();
-		translate(0, height - 50 - ((height-100)/(sleepMax/2000))*i);
+		translate(0, height - 50 - ((height - 100) / (sleepMax / 2000)) * i);
 		line(750, 0, 760, 0);
-		text(i*2+"00", 765,-3);
+		text(i * 2 + "00", 765, -3);
 		pop();
 	}
-	
+
 
 
 	// determine the min and max values for x and y axes

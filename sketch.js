@@ -19,7 +19,7 @@ var weight = [];
 
 
 // Handle upload button click
-document.getElementById("upload-button").addEventListener("click", (e) => {
+document.getElementById("upload1").addEventListener("click", (e) => {
 	e.preventDefault();
 
 	let fileReader = new FileReader();

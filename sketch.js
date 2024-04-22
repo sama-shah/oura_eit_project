@@ -2,6 +2,8 @@ let sleepPeriodsFile;
 let weightFile;
 let allData = {};
 let allDataArray = [];
+let hrvRange;
+let hrvMin;
 
 // Get the selected file when input changes
 // document.getElementById("sleepperiods").addEventListener("change", (event) => {
@@ -182,6 +184,12 @@ function setup() {
 	canvas.parent("main-sketch-area");
 	frameRate(60);
 	noLoop();
+
+	hoverBox = createDiv(''); // Create a new div element for the hover box
+	hoverBox.style('background-color', 'rgba(255, 255, 255, 0.8)');
+	hoverBox.style('padding', '5px');
+	hoverBox.style('position', 'absolute');
+	hoverBox.style('display', 'none'); // Initially hide the hover box
 }
 
 function draw() {
@@ -388,6 +396,46 @@ function draw() {
 		let y = mapY(entry.hrv);
 		point(x, y);
 	}
+}
+
+// line graph hover box interaction:
+
+function mouseMoved() {
+	mouseMovedOverGraph();
+  }
+  
+function mouseMovedOverGraph() {
+// Check if the mouse is over the graph area
+if (mouseX > 90 && mouseX < width - 50 && mouseY > 50 && mouseY < height - 50) {
+	// Find the closest data point to the mouse position
+	let closestIndex = -1;
+	let closestDistance = Infinity;
+	for (let i = 0; i < allDataArray.length; i++) {
+	const x = 95 + ((width - 50 - 90) / allDataArray.length) * i;
+	const y = height - 50 - (((height - 100) / hrvRange) * (parseInt(allDataArray[i].getHRV()) - hrvMin));
+	const distance = dist(mouseX, mouseY, x, y);
+	if (distance < closestDistance) {
+		closestDistance = distance;
+		closestIndex = i;
+	}
+	}
+
+	// Display the hover box with the data point information
+	if (closestIndex !== -1) {
+	const entry = allDataArray[closestIndex];
+	const date = `${entry.getDate().getMonth() + 1}/${entry.getDate().getDate()}/${entry.getDate().getFullYear()}`;
+	const hrv = entry.getHRV();
+	const weight = entry.weight;
+	const sleep = entry.getSleep();
+	hoverBox.html(`Date: ${date}<br>HRV: ${hrv}<br>Weight: ${weight}<br>Sleep: ${sleep}`);
+	hoverBox.position(mouseX + 10, mouseY + 10);
+	hoverBox.style('display', 'block');
+	} else {
+	hoverBox.style('display', 'none');
+	}
+} else {
+	hoverBox.style('display', 'none');
+}
 }
 
 // function to find the minimum value in an array

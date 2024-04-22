@@ -72,7 +72,6 @@ document.getElementById("upload-button1").addEventListener("click", (e) => {
 		});
 
 
-
 		//let fileReader = new FileReader();
 
 		// Read the selected file as binary string
@@ -145,6 +144,9 @@ document.getElementById("upload-button1").addEventListener("click", (e) => {
 
 });
 
+document.getElementById('start-date').addEventListener('change', draw);
+document.getElementById('end-date').addEventListener('change', draw);
+
 class DataEntry {
 	constructor(date, deep, light, rem, awake, hrv) {
 		this.date = date;
@@ -196,6 +198,7 @@ function setup() {
 }
 
 function draw() {
+
 	background(255);
 
 	stroke(128, 128, 128);
@@ -434,6 +437,7 @@ function draw() {
 
 
 	// determine the min and max values for x and y axes
+
 	let minX = min(allDataArray.map(entry => entry.date.getTime()));
 	let maxX = max(allDataArray.map(entry => entry.date.getTime()));
 	let minY = min(allDataArray.map(entry => min(entry.deep, entry.light, entry.hrv)));

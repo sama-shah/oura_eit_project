@@ -303,7 +303,11 @@ function draw() {
 	// 	circle(95 + ((width - 50 - 90) / allDataArray.length) * i, height - 50-(((height - 100) / hrvRange) * (parseInt(allDataArray[i].getHRV()) - hrvMin)) , 5);
 	// 	pop();
 	// }
+	
 	beginShape();
+	noFill(); // This line ensures that there is no fill for the shape
+stroke(0); // Set the stroke color to black (you can change this value)
+strokeWeight(1);
 	for (var i = 0; i < allDataArray.length; i++) {
 		let x = 95 + ((width - 50 - 90) / allDataArray.length) * i;
 		let y = height - 50 - (((height - 100) / hrvRange) * (parseInt(allDataArray[i].getHRV()) - hrvMin));
@@ -340,8 +344,11 @@ function draw() {
 
 		pop();
 	}
-
+	
 	beginShape();
+	noFill(); // This line ensures that there is no fill for the shape
+	stroke(0); // Set the stroke color to black (you can change this value)
+	strokeWeight(1);
 	for (var i = 0; i < allDataArray.length; i++) {
 		let x = 95 + ((width - 50 - 90) / allDataArray.length) * i;
 		let y = height - 50 - (((height - 100) / weightRange) * (parseInt(allDataArray[i].weight) - weightMin));
@@ -368,6 +375,30 @@ function draw() {
 		text(i * 2 + "00", 765, -3);
 		pop();
 	}
+
+	beginShape();
+	noFill(); // This line ensures that there is no fill for the shape
+	stroke(0); // Set the stroke color to black (you can change this value)
+	strokeWeight(1);
+	for (var i = 0; i < allDataArray.length; i++) {
+		let x = 95 + ((width - 50 - 90) / allDataArray.length) * i;
+		let y = height - 50 - (((height - 100) / sleepMax) * (parseInt(allDataArray[i].getSleep())));
+		vertex(x, y);
+	}
+	endShape();
+
+	// beginShape();
+	// noFill(); // This line ensures that there is no fill for the shape
+	// stroke(0); // Set the stroke color to black (you can change this value)
+	// strokeWeight(1);
+	// for (var i = 0; i < allDataArray.length; i++) {
+	// 	let x = 95 + ((width - 50 - 90) / allDataArray.length) * i;
+	// 	let y = height - 50 - (((height - 100) / sleepMax) * (parseInt(allDataArray[i].getSleep) ));
+	// 	vertex(x, y);
+	// }
+	// endShape();
+
+
 
 
 

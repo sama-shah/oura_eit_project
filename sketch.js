@@ -21,6 +21,7 @@ var light = [];
 var weight = [];
 
 
+
 // Handle upload button click
 document.getElementById("upload-button1").addEventListener("click", (e) => {
 	e.preventDefault();
@@ -100,8 +101,7 @@ document.getElementById("upload-button1").addEventListener("click", (e) => {
 					if (result[i].day in allData) {
 						var entry = allData[result[i].day];
 						entry.weight = result[i].weight_lbs;
-
-
+						entry.dosage = result[i].dosage;
 					}
 
 				}
@@ -207,6 +207,7 @@ function draw() {
 	strokeWeight(1);
 	textSize(16);
 	textAlign(CENTER, TOP);
+	
 	text("date", width / 2, height - 20);
 
 	//y axis 1
@@ -219,6 +220,8 @@ function draw() {
 	push();
 	translate(0, height / 2);
 	rotate(-HALF_PI);
+	noStroke();
+	fill("#388D36");
 	text("HRV", 0, 0);
 	pop();
 
@@ -232,6 +235,8 @@ function draw() {
 	push();
 	translate(65, height / 2);
 	rotate(-HALF_PI);
+	noStroke();
+	fill("#FF0000");
 	text("Weight", 0, -16);
 	pop();
 
@@ -245,8 +250,12 @@ function draw() {
 	push();
 	translate(785, height / 2);
 	rotate(-HALF_PI);
+	noStroke();
+	fill("#2F66B9");
 	text("Sleep", 0, 0);
 	pop();
+
+	
 
 	console.log(allDataArray.length);
 	//placing the date x axis
@@ -262,6 +271,7 @@ function draw() {
 		//console.log(90 + ((width - 50-90)/allDataArray.length)*i);
 		pop();
 	}
+
 	var sleepMax = parseInt(allDataArray[0].getSleep());
 
 	for (var i = 0; i < allDataArray.length; i++) {
@@ -288,9 +298,9 @@ function draw() {
 	}
 
 	stroke(0); // Set the stroke color to black (you can change this value)
-	strokeWeight(1); // Set the stroke weight (thickness) of the bars
+	strokeWeight(2); // Set the stroke weight (thickness) of the bars
 	noStroke();
-	fill(200);
+	fill("#ADD8E6");
 	for (var i = 0; i < allDataArray.length; i++) {
 		let x = 90 + ((width - 50 - 90) / allDataArray.length) * i;
 		let y = height - 50 - (((height - 100) / sleepMax) * (parseInt(allDataArray[i].getSleep())));
@@ -348,8 +358,8 @@ function draw() {
 
 	beginShape();
 	noFill(); // This line ensures that there is no fill for the shape
-	stroke(0); // Set the stroke color to black (you can change this value)
-	strokeWeight(1);
+	stroke("#388D36"); // Set the stroke color to black (you can change this value)
+	strokeWeight(2);
 	for (var i = 0; i < allDataArray.length; i++) {
 		let x = 95 + ((width - 50 - 90) / allDataArray.length) * i;
 		let y = height - 50 - (((height - 100) / hrvRange) * (parseInt(allDataArray[i].getHRV()) - hrvMin));
@@ -385,24 +395,59 @@ function draw() {
 		stroke(0);
 		line(80, 0, 90, 0);
 		noStroke();
-	fill(0);
+		fill(0);
 		text(weightMin + i, 70, -3);
-
 		pop();
 	}
 
+
 	beginShape();
 	noFill(); // This line ensures that there is no fill for the shape
-	stroke(0); // Set the stroke color to black (you can change this value)
-	strokeWeight(1);
+	stroke("#FF0000"); // Set the stroke color to black (you can change this value)
+	strokeWeight(2);
 	for (var i = 0; i < allDataArray.length; i++) {
 		let x = 95 + ((width - 50 - 90) / allDataArray.length) * i;
 		let y = height - 50 - (((height - 100) / weightRange) * (parseInt(allDataArray[i].weight) - weightMin));
 		vertex(x, y);
 	}
+
 	endShape();
 
-
+	// for (var i = 0; i < allDataArray.length; i++) {
+	// 	if (parseInt(allDataArray[i].dosage) > 0) {
+	// 	  push(); // Save the current canvas state
+	// 	  translate(90 + ((width - 50 - 90) / allDataArray.length) * i, height - 50); // Translate to the center of the line
+	// 	  rotate(HALF_PI); // Rotate the canvas by 90 degrees
+	// 	  line(0, 5, -(height-100),5 ); // Draw the vertical line
+	// 	  pop(); // Restore the canvas state
+	// 	}
+		
+	// }
+	for (var i = 0; i < allDataArray.length; i++) {
+		if (parseInt(allDataArray[i].dosage) > 0) {
+			let x = 95 + ((width - 50 - 90) / allDataArray.length) * i; // X-coordinate for text
+			let y = height - 50 - (height - 100); // Y-coordinate for text
+	
+			push(); // Save the current canvas state
+			translate(x, height - 50); // Translate to the center of the line
+			stroke(150); // Set stroke color to gray
+			strokeWeight(2); // Set thickness of the line
+	
+			for (let yDash = 0; yDash < height - 100; yDash += 10) {
+				line(0, -yDash, 0, -(yDash + 5)); // Draw dashed line segments with negative y values to move higher up
+			}
+	
+			pop(); // Restore the canvas state
+	
+			// Draw text
+			fill(0); // Set fill color to black
+			noStroke(); // Remove stroke
+			textAlign(CENTER, BOTTOM); // Align text horizontally to center and vertically to bottom
+			text(allDataArray[i].dosage+ " mg", x, y); // Draw dosage value
+		}
+	}
+	
+	
 
 
 	// beginShape();
@@ -440,11 +485,11 @@ function draw() {
 	// line(50, height - 50, 50, 50);
 
 	// draw data points of HRV
-	for (let entry of allDataArray) {
-		let x = mapX(entry.date.getTime());
-		let y = mapY(entry.hrv);
-		point(x, y);
-	}
+	// for (let entry of allDataArray) {
+	// 	let x = mapX(entry.date.getTime());
+	// 	let y = mapY(entry.hrv);
+	// 	point(x, y);
+	// }
 }
 
 // line graph hover box interaction:

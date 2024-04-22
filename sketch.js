@@ -4,6 +4,7 @@ let allData = {};
 let allDataArray = [];
 let hrvRange;
 let hrvMin;
+let dateCoordinates = [];
 
 // Get the selected file when input changes
 // document.getElementById("sleepperiods").addEventListener("change", (event) => {
@@ -53,6 +54,8 @@ document.getElementById("upload-button1").addEventListener("click", (e) => {
 			const result = XLSX.utils.sheet_to_json(workbook.Sheets[sheet], {
 				raw: false,
 			});
+			console.log("Weight data from sheet:", sheet);
+        	console.log(result);
 			for (var i = 0; i < result.length; i++) {
 
 				var dateArray = result[i].day.split("/");
@@ -100,7 +103,7 @@ document.getElementById("upload-button1").addEventListener("click", (e) => {
 					if (result[i].day in allData) {
 						var entry = allData[result[i].day];
 						entry.weight = result[i].weight_lbs;
-
+						console.log(`Day: ${result[i].day}, Weight: ${result[i].weight_lbs}`);
 
 					}
 
@@ -271,6 +274,13 @@ function draw() {
 		}
 	}
 
+	 // Store the x-coordinates of the dates
+	 for (let i = 0; i < allDataArray.length; i++) {
+		const x = 95 + ((width - 50 - 90) / allDataArray.length) * i;
+		const date = allDataArray[i].getDate();
+		dateCoordinates.push({ x, date });
+	  }
+
 	console.log("sleep max" + sleepMax);
 	noStroke();
 	fill(0);
@@ -363,6 +373,8 @@ function draw() {
 	fill(0);
 	var weightMax = parseInt(allDataArray[0].weight);
 	var weightMin = parseInt(allDataArray[0].weight);
+	// var weightMax = -Infinity;
+	// var weightMin = Infinity;
 
 	for (var i = 0; i < allDataArray.length; i++) {
 		var currentWeight = parseInt(allDataArray[i].weight);
@@ -379,6 +391,7 @@ function draw() {
 	var weightRange = weightMax - weightMin + 1;
 
 	console.log("weight range" + weightRange);
+
 	for (var i = 0; i < weightRange; i++) {
 		push();
 		translate(0, height - 50 - ((height - 100) / weightRange) * i);
@@ -447,45 +460,53 @@ function draw() {
 	}
 }
 
-// line graph hover box interaction:
+// line graph hover interaction:
 
 function mouseMoved() {
-	mouseMovedOverGraph(hrvRange);
+	mouseMovedOverGraph();
   }
   
-function mouseMovedOverGraph(hrvRange) {
-// Check if the mouse is over the graph area
-if (mouseX > 90 && mouseX < width - 50 && mouseY > 50 && mouseY < height - 50) {
-	// Find the closest data point to the mouse position
-	let closestIndex = -1;
-	let closestDistance = Infinity;
-	for (let i = 0; i < allDataArray.length; i++) {
-	const x = 95 + ((width - 50 - 90) / allDataArray.length) * i;
-	const y = height - 50 - (((height - 100) / hrvRange) * (parseInt(allDataArray[i].getHRV()) - hrvMin));
-	const distance = dist(mouseX, mouseY, x, y);
-	if (distance < closestDistance) {
-		closestDistance = distance;
-		closestIndex = i;
-	}
-	}
+  function mouseMoved() {
+	const summaryData = document.getElementById('summary-data');
+	summaryData.innerHTML = ''; // Clear the previous data
 
-	// Display the hover box with the data point information
-	if (closestIndex !== -1) {
-	const entry = allDataArray[closestIndex];
-	const date = `${entry.getDate().getMonth() + 1}/${entry.getDate().getDate()}/${entry.getDate().getFullYear()}`;
-	const hrv = entry.getHRV();
-	const weight = entry.weight;
-	const sleep = entry.getSleep();
-	hoverBox.html(`Date: ${date}<br>HRV: ${hrv}<br>Weight: ${weight}<br>Sleep: ${sleep}`);
-	hoverBox.position(mouseX + 10, mouseY + 10);
-	hoverBox.style('display', 'block');
-	} else {
-	hoverBox.style('display', 'none');
+	// Check if the mouse is over any of the date coordinates
+	for (const { x, date } of dateCoordinates) {
+		const distanceFromDate = dist(mouseX, mouseY, x, height - 50);
+		if (distanceFromDate < 10) { // Adjust this value as needed
+		const entry = allDataArray[allDataArray.findIndex(e => e.getDate().getTime() === date.getTime())];
+		const hrv = entry.getHRV();
+		const weight = entry.weight;
+		const sleep = entry.getSleep();
+		const dateStr = `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
+		const dataHTML = `
+			<p><strong>Date:</strong> ${dateStr}</p>
+			<p><strong>HRV:</strong> ${hrv}</p>
+			<p><strong>Weight:</strong> ${weight}</p>
+			<p><strong>Sleep:</strong> ${sleep}</p>
+		`;
+		summaryData.innerHTML = dataHTML;
+		break;
+		}
 	}
-} else {
-	hoverBox.style('display', 'none');
-}
-}
+	// hoverBox.style('display', 'none'); // Initially hide the hover box
+  
+	// // Check if the mouse is over any of the date coordinates
+	// for (const { x, date } of dateCoordinates) {
+	//   const distanceFromDate = dist(mouseX, mouseY, x, height - 50);
+	//   if (distanceFromDate < 10) { // Adjust this value as needed
+	// 	const entry = allDataArray[allDataArray.findIndex(e => e.getDate().getTime() === date.getTime())];
+	// 	const hrv = entry.getHRV();
+	// 	const weight = entry.weight;
+	// 	const sleep = entry.getSleep();
+	// 	const dateStr = `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
+	// 	hoverBox.html(`Date: ${dateStr}<br>HRV: ${hrv}<br>Weight: ${weight}<br>Sleep: ${sleep}`);
+	// 	hoverBox.position(mouseX + 10, mouseY + 10);
+	// 	hoverBox.style('display', 'block');
+	// 	break;
+	//   }
+  	//}
+  }
 
 // function to find the minimum value in an array
 function min(arr) {

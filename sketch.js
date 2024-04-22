@@ -254,7 +254,46 @@ function draw() {
 		//console.log(90 + ((width - 50-90)/allDataArray.length)*i);
 		pop();
 	}
+	var sleepMax = parseInt(allDataArray[0].getSleep());
 
+	for (var i = 0; i < allDataArray.length; i++) {
+		var currentSleep = parseInt(allDataArray[i].getSleep());
+		if (currentSleep > sleepMax) {
+			sleepMax = currentSleep;
+		}
+	}
+
+	console.log("sleep max" + sleepMax);
+	noStroke();
+	fill(0);
+
+	for (var i = 0; i < sleepMax / 2000; i++) {
+		push();
+		translate(0, height - 50 - ((height - 100) / (sleepMax / 2000)) * i);
+		stroke(0);
+		line(750, 0, 760, 0);
+		
+		noStroke();
+	fill(0);
+		text(i * 2 + "00", 765, -3);
+		pop();
+	}
+
+	stroke(0); // Set the stroke color to black (you can change this value)
+	strokeWeight(1); // Set the stroke weight (thickness) of the bars
+	noStroke();
+	fill(200);
+	for (var i = 0; i < allDataArray.length; i++) {
+		let x = 90 + ((width - 50 - 90) / allDataArray.length) * i;
+		let y = height - 50 - (((height - 100) / sleepMax) * (parseInt(allDataArray[i].getSleep())));
+		let barWidth = (width - 50 - 90) / allDataArray.length; // Calculate the width of each bar
+		let barHeight = (((height - 100) / sleepMax) * (parseInt(allDataArray[i].getSleep()))); // Calculate the height of each bar
+
+		// Draw a rectangle for each bar
+		rect(x, y, barWidth, barHeight);
+	}
+	noStroke();
+	fill(0);
 
 	//figruing out the min max of HRV
 
@@ -273,7 +312,7 @@ function draw() {
 
 		}
 	}
-	
+
 	hrvMin -= 3;
 
 	var hrvRange = hrvMax - hrvMin + 1;
@@ -283,7 +322,10 @@ function draw() {
 	for (var i = 0; i < hrvRange; i++) {
 		push();
 		translate(0, height - 50 - ((height - 100) / hrvRange) * i);
+		stroke(0);
 		line(30, 0, 40, 0);
+		noStroke();
+	fill(0);
 		text(hrvMin + i, 20, -3);
 		console.log(hrvMin + i);
 		pop();
@@ -295,11 +337,11 @@ function draw() {
 	// 	circle(95 + ((width - 50 - 90) / allDataArray.length) * i, height - 50-(((height - 100) / hrvRange) * (parseInt(allDataArray[i].getHRV()) - hrvMin)) , 5);
 	// 	pop();
 	// }
-	
+
 	beginShape();
 	noFill(); // This line ensures that there is no fill for the shape
-stroke(0); // Set the stroke color to black (you can change this value)
-strokeWeight(1);
+	stroke(0); // Set the stroke color to black (you can change this value)
+	strokeWeight(1);
 	for (var i = 0; i < allDataArray.length; i++) {
 		let x = 95 + ((width - 50 - 90) / allDataArray.length) * i;
 		let y = height - 50 - (((height - 100) / hrvRange) * (parseInt(allDataArray[i].getHRV()) - hrvMin));
@@ -309,7 +351,8 @@ strokeWeight(1);
 	// for(var i = 0 ; i < allDataArray.length ; i++){
 	// 	circle(((width - 50-90)/allDataArray.length), allDataArray[i].getHRV(),10);
 	// }
-
+	noStroke();
+	fill(0);
 	var weightMax = parseInt(allDataArray[0].weight);
 	var weightMin = parseInt(allDataArray[0].weight);
 
@@ -326,17 +369,20 @@ strokeWeight(1);
 	}
 	weightMin -= 3;
 	var weightRange = weightMax - weightMin + 1;
-	
+
 	console.log("weight range" + weightRange);
 	for (var i = 0; i < weightRange; i++) {
 		push();
 		translate(0, height - 50 - ((height - 100) / weightRange) * i);
+		stroke(0);
 		line(80, 0, 90, 0);
+		noStroke();
+	fill(0);
 		text(weightMin + i, 70, -3);
 
 		pop();
 	}
-	
+
 	beginShape();
 	noFill(); // This line ensures that there is no fill for the shape
 	stroke(0); // Set the stroke color to black (you can change this value)
@@ -349,35 +395,7 @@ strokeWeight(1);
 	endShape();
 
 
-	var sleepMax = parseInt(allDataArray[0].getSleep());
 
-	for (var i = 0; i < allDataArray.length; i++) {
-		var currentSleep = parseInt(allDataArray[i].getSleep());
-		if (currentSleep > sleepMax) {
-			sleepMax = currentSleep;
-		}
-	}
-
-	console.log("sleep max" + sleepMax);
-
-	for (var i = 0; i < sleepMax / 2000; i++) {
-		push();
-		translate(0, height - 50 - ((height - 100) / (sleepMax / 2000)) * i);
-		line(750, 0, 760, 0);
-		text(i * 2 + "00", 765, -3);
-		pop();
-	}
-
-	beginShape();
-	noFill(); // This line ensures that there is no fill for the shape
-	stroke(0); // Set the stroke color to black (you can change this value)
-	strokeWeight(1);
-	for (var i = 0; i < allDataArray.length; i++) {
-		let x = 95 + ((width - 50 - 90) / allDataArray.length) * i;
-		let y = height - 50 - (((height - 100) / sleepMax) * (parseInt(allDataArray[i].getSleep())));
-		vertex(x, y);
-	}
-	endShape();
 
 	// beginShape();
 	// noFill(); // This line ensures that there is no fill for the shape

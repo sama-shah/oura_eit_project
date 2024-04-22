@@ -273,6 +273,8 @@ function draw() {
 
 		}
 	}
+	
+	hrvMin -= 3;
 
 	var hrvRange = hrvMax - hrvMin + 1;
 	console.log("range: " + hrvRange);
@@ -286,12 +288,20 @@ function draw() {
 		console.log(hrvMin + i);
 		pop();
 	}
-	//draw weight data points 
+
+	//draw hrv data points 
+	// for (var i = 0; i < allDataArray.length; i++) {
+	// 	push();
+	// 	circle(95 + ((width - 50 - 90) / allDataArray.length) * i, height - 50-(((height - 100) / hrvRange) * (parseInt(allDataArray[i].getHRV()) - hrvMin)) , 5);
+	// 	pop();
+	// }
+	beginShape();
 	for (var i = 0; i < allDataArray.length; i++) {
-		push();
-		circle(95 + ((width - 50 - 90) / allDataArray.length) * i, (((height - 100) / hrvRange) * (parseInt(allDataArray[i].getHRV()) - hrvMin)) - 50, 5);
-		pop();
+		let x = 95 + ((width - 50 - 90) / allDataArray.length) * i;
+		let y = height - 50 - (((height - 100) / hrvRange) * (parseInt(allDataArray[i].getHRV()) - hrvMin));
+		vertex(x, y);
 	}
+	endShape();
 	// for(var i = 0 ; i < allDataArray.length ; i++){
 	// 	circle(((width - 50-90)/allDataArray.length), allDataArray[i].getHRV(),10);
 	// }
@@ -310,7 +320,9 @@ function draw() {
 
 		}
 	}
+	weightMin -= 3;
 	var weightRange = weightMax - weightMin + 1;
+	
 	console.log("weight range" + weightRange);
 	for (var i = 0; i < weightRange; i++) {
 		push();
@@ -320,6 +332,15 @@ function draw() {
 
 		pop();
 	}
+
+	beginShape();
+	for (var i = 0; i < allDataArray.length; i++) {
+		let x = 95 + ((width - 50 - 90) / allDataArray.length) * i;
+		let y = height - 50 - (((height - 100) / weightRange) * (parseInt(allDataArray[i].weight) - weightMin));
+		vertex(x, y);
+	}
+	endShape();
+
 
 	var sleepMax = parseInt(allDataArray[0].getSleep());
 

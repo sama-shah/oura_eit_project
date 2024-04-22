@@ -186,7 +186,7 @@ class DataEntry {
 // }
 
 function setup() {
-	var canvas = createCanvas(800, 400);
+	var canvas = createCanvas(1000, 500);
 	canvas.parent("main-sketch-area");
 	frameRate(60);
 	noLoop();

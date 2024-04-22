@@ -450,10 +450,10 @@ function draw() {
 // line graph hover box interaction:
 
 function mouseMoved() {
-	mouseMovedOverGraph();
+	mouseMovedOverGraph(hrvRange);
   }
   
-function mouseMovedOverGraph() {
+function mouseMovedOverGraph(hrvRange) {
 // Check if the mouse is over the graph area
 if (mouseX > 90 && mouseX < width - 50 && mouseY > 50 && mouseY < height - 50) {
 	// Find the closest data point to the mouse position

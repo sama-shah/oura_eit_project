@@ -250,12 +250,12 @@ function draw() {
 	//y axis 3 (on right)
 	stroke(128, 128, 128);
 	strokeWeight(2);
-	line(750, height - 50, 750, 50);
-	//y 3 label
+	line(width - 50, height - 50, width - 50, 50); // Adjusted the x-coordinate here
+	// y 3 label
 	stroke(128, 128, 128);
 	strokeWeight(1);
 	push();
-	translate(785, height / 2);
+	translate(width - 15, height / 2);
 	rotate(-HALF_PI);
 	noStroke();
 	fill("#2F66B9");
@@ -307,7 +307,7 @@ function draw() {
 		
 		noStroke();
 	fill(0);
-		text(i * 2 + "00", 765, -3);
+		text(i * 2 + "00", 780, -3);
 		pop();
 	}
 

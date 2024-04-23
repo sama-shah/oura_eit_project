@@ -66,7 +66,7 @@ document.getElementById("upload-button1").addEventListener("click", (e) => {
 				var DE = new DataEntry(dateObject, result[i].deep_sleep_duration, result[i].light_sleep_duration, result[i].rem_sleep_duration, result[i].awake_time, result[i].average_hrv);
 
 				allData[result[i].day] = DE;
-				filteredData.push(DE);
+				allDataArray.push(DE);
 
 
 			}

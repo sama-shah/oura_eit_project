@@ -6,6 +6,8 @@ let hrvRange;
 let hrvMin;
 let dateCoordinates = [];
 let filteredData = [];
+let hrvAvgElement, sleepDurationAvgElement, weightAvgElement;
+let hrvAvgText, sleepDurationAvgText, weightAvgText;
 
 // Get the selected file when input changes
 // document.getElementById("sleepperiods").addEventListener("change", (event) => {
@@ -73,7 +75,6 @@ document.getElementById("upload-button1").addEventListener("click", (e) => {
 			// console.log(allData);
 
 		});
-
 
 		//let fileReader = new FileReader();
 
@@ -198,6 +199,15 @@ function setup() {
 	hoverBox.style('padding', '5px');
 	hoverBox.style('position', 'absolute');
 	hoverBox.style('display', 'none'); // Initially hide the hover box
+
+	// Get references to the HTML elements for displaying averages
+    hrvAvgElement = document.getElementById('hrv-avg');
+    sleepDurationAvgElement = document.getElementById('sleep-duration-avg');
+    weightAvgElement = document.getElementById('weight-avg');
+
+	hrvAvgText = document.getElementById('hrv-avg-text');
+    sleepDurationAvgText = document.getElementById('sleep-duration-avg-text');
+    weightAvgText = document.getElementById('weight-avg-text');
 }
 
 function draw() {
@@ -225,6 +235,35 @@ function draw() {
 	  });
 	}
 
+    // Calculate average HRV and sleep duration 
+    const hrvValues = filteredData.map(entry => entry.getHRV());
+    const hrvAverage = hrvValues.reduce((sum, value) => sum + value, 0) / hrvValues.length;
+
+    const sleepDurationValues = filteredData.map(entry => entry.getSleep() / 3600);
+    const sleepDurationAverage = sleepDurationValues.reduce((sum, value) => sum + value, 0) / sleepDurationValues.length;
+
+    // Calculate average weight 
+    const weightValues = filteredData.map(entry => entry.weight); // getWeight()???
+    const weightAverage = weightValues.reduce((sum, value) => sum + value, 0) / weightValues.length;
+
+	// format start and end dates
+	// Format the start and end dates
+    const startDateFormatted = startDate ? `${startDate.getMonth() + 1}/${startDate.getDate()}/${startDate.getFullYear()}` : 'N/A';
+    const endDateFormatted = endDate ? `${endDate.getMonth() + 1}/${endDate.getDate()}/${endDate.getFullYear()}` : 'N/A';
+
+    // Update HRV average
+    hrvAvgElement.textContent = `${hrvAverage.toFixed(2)} ms`;
+	hrvAvgText.textContent = `ON AVERAGE ${startDateFormatted} - ${endDateFormatted}`;
+	
+
+    // Update sleep duration average
+    sleepDurationAvgElement.textContent = `${sleepDurationAverage.toFixed(2)} hrs`;
+	sleepDurationAvgText.textContent = `ON AVERAGE ${startDateFormatted} - ${endDateFormatted}`;
+
+    // Update weight average
+    weightAvgElement.textContent = `${weightAverage.toFixed(2)} lbs`;
+	weightAvgText.textContent = `ON AVERAGE ${startDateFormatted} - ${endDateFormatted}`;
+
 	background(255);
 
 	stroke(128, 128, 128);
@@ -240,6 +279,7 @@ function draw() {
 	textSize(16);
 	textAlign(CENTER, TOP);
 	
+	noStroke()
 	text("date", width / 2, height - 20);
 
 	//y axis 1
@@ -258,7 +298,7 @@ function draw() {
 	pop();
 
 	stroke(128, 128, 128);
-	strokeWeight(2);
+	strokeWeight(1);
 	//y axis 2
 	line(90, height - 50, 90, 50);
 	//y 2 label
@@ -495,9 +535,6 @@ if (document.getElementById('toggle-weight').checked) {
 			text(filteredData[i].dosage+ " mg", x, y); // Draw dosage value
 		}
 	}
-	
-	
-
 
 	// beginShape();
 	// noFill(); // This line ensures that there is no fill for the shape
@@ -509,9 +546,6 @@ if (document.getElementById('toggle-weight').checked) {
 	// 	vertex(x, y);
 	// }
 	// endShape();
-
-
-
 
 
 	// determine the min and max values for x and y axes
@@ -635,3 +669,5 @@ function scaleLinear() {
 
 	return scale;
 }
+
+// Updating the card averages

@@ -62,6 +62,20 @@
     display: none;
   }
 
+  #paitentName{
+    border: none;
+    font-family: 'Open Sans';
+    font-size: larger;
+    color: #223AA3;
+    width: 200px;
+  }
+  .patientInfo{
+    border: none;
+    font-family: 'Open Sans';
+    font-size: large;
+    width: 150px;
+
+  }
   .upload-download {
     margin-left: 20px; /* Add margin-left to the upload-download section */
   }

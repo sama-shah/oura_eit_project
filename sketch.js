@@ -346,11 +346,14 @@ function draw() {
 		let barWidth = (width - 50 - 90) / filteredData.length; // Calculate the width of each bar
 		let barHeight = (((height - 100) / sleepMax) * (parseInt(filteredData[i].getSleep()))); // Calculate the height of each bar
 
-		// Draw a rectangle for each bar
-		rect(x, y, barWidth, barHeight);
-	}
-	noStroke();
-	fill(0);
+		if (document.getElementById('toggle-sleep').checked) {
+			noStroke();
+			fill("#ADD8E6");
+		
+			// Draw a rectangle for each bar
+			rect(x, y, barWidth, barHeight);
+		  }
+		}
 
 	//figruing out the min max of HRV
 
@@ -395,16 +398,19 @@ function draw() {
 	// 	pop();
 	// }
 
+// Draw HRV data if the checkbox is checked
+if (document.getElementById('toggle-hrv').checked) {
 	beginShape();
 	noFill(); // This line ensures that there is no fill for the shape
 	stroke("#388D36"); // Set the stroke color to black (you can change this value)
 	strokeWeight(2);
 	for (var i = 0; i < filteredData.length; i++) {
-		let x = 95 + ((width - 50 - 90) / filteredData.length) * i;
-		let y = height - 50 - (((height - 100) / hrvRange) * (parseInt(filteredData[i].getHRV()) - hrvMin));
-		vertex(x, y);
+	  let x = 95 + ((width - 50 - 90) / filteredData.length) * i;
+	  let y = height - 50 - (((height - 100) / hrvRange) * (parseInt(filteredData[i].getHRV()) - hrvMin));
+	  vertex(x, y);
 	}
 	endShape();
+  }
 	// for(var i = 0 ; i < allDataArray.length ; i++){
 	// 	circle(((width - 50-90)/allDataArray.length), allDataArray[i].getHRV(),10);
 	// }
@@ -442,7 +448,7 @@ function draw() {
 		pop();
 	}
 
-
+if (document.getElementById('toggle-weight').checked) {
 	beginShape();
 	noFill(); // This line ensures that there is no fill for the shape
 	stroke("#FF0000"); // Set the stroke color to black (you can change this value)
@@ -454,6 +460,7 @@ function draw() {
 	}
 
 	endShape();
+}
 
 	// for (var i = 0; i < allDataArray.length; i++) {
 	// 	if (parseInt(allDataArray[i].dosage) > 0) {
@@ -536,9 +543,6 @@ function draw() {
 }
 
 
-//toggle true false
-//checkbox event listener
-//if statement 
 
 // line graph hover interaction:
 

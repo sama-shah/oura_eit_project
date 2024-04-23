@@ -236,6 +236,8 @@ function draw() {
 	}
 
     // Calculate average HRV and sleep duration 
+	// console.log(entry instanceof DataEntry); // Should log true
+	// console.log(entry); // Check what 'entry' contains
     const hrvValues = filteredData.map(entry => entry.getHRV());
     const hrvAverage = hrvValues.reduce((sum, value) => sum + value, 0) / hrvValues.length;
 
@@ -243,7 +245,7 @@ function draw() {
     const sleepDurationAverage = sleepDurationValues.reduce((sum, value) => sum + value, 0) / sleepDurationValues.length;
 
     // Calculate average weight 
-    const weightValues = filteredData.map(entry => entry.weight); // getWeight()???
+    const weightValues = filteredData.map(entry => weight); // getWeight()???
     const weightAverage = weightValues.reduce((sum, value) => sum + value, 0) / weightValues.length;
 
 	// format start and end dates

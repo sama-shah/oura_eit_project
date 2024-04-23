@@ -6,6 +6,8 @@ let hrvRange;
 let hrvMin;
 let dateCoordinates = [];
 let filteredData = [];
+let hrvAvgElement, sleepDurationAvgElement, weightAvgElement;
+let hrvAvgText, sleepDurationAvgText, weightAvgText;
 
 // Get the selected file when input changes
 // document.getElementById("sleepperiods").addEventListener("change", (event) => {
@@ -73,7 +75,6 @@ document.getElementById("upload-button1").addEventListener("click", (e) => {
 			// console.log(allData);
 
 		});
-
 
 		//let fileReader = new FileReader();
 
@@ -198,6 +199,15 @@ function setup() {
 	hoverBox.style('padding', '5px');
 	hoverBox.style('position', 'absolute');
 	hoverBox.style('display', 'none'); // Initially hide the hover box
+
+	// Get references to the HTML elements for displaying averages
+    hrvAvgElement = document.getElementById('hrv-avg');
+    sleepDurationAvgElement = document.getElementById('sleep-duration-avg');
+    weightAvgElement = document.getElementById('weight-avg');
+
+	hrvAvgText = document.getElementById('hrv-avg-text');
+    sleepDurationAvgText = document.getElementById('sleep-duration-avg-text');
+    weightAvgText = document.getElementById('weight-avg-text');
 }
 
 function draw() {
@@ -225,6 +235,37 @@ function draw() {
 	  });
 	}
 
+    // Calculate average HRV and sleep duration
+	// console.log(entry instanceof DataEntry); // Should log true
+	// console.log(entry); // Check what 'entry' contains
+    const hrvValues = filteredData.map(entry => entry.getHRV());
+    const hrvAverage = hrvValues.reduce((sum, value) => sum + value, 0) / hrvValues.length;
+
+    const sleepDurationValues = filteredData.map(entry => entry.getSleep() / 3600);
+    const sleepDurationAverage = sleepDurationValues.reduce((sum, value) => sum + value, 0) / sleepDurationValues.length;
+
+    // Calculate average weight
+    const weightValues = filteredData.map(entry => weight); // getWeight()???
+    const weightAverage = weightValues.reduce((sum, value) => sum + value, 0) / weightValues.length;
+
+	// format start and end dates
+	// Format the start and end dates
+    const startDateFormatted = startDate ? `${startDate.getMonth() + 1}/${startDate.getDate()}/${startDate.getFullYear()}` : 'N/A';
+    const endDateFormatted = endDate ? `${endDate.getMonth() + 1}/${endDate.getDate()}/${endDate.getFullYear()}` : 'N/A';
+
+    // Update HRV average
+    hrvAvgElement.textContent = `${hrvAverage.toFixed(2)} ms`;
+	hrvAvgText.textContent = `ON AVERAGE ${startDateFormatted} - ${endDateFormatted}`;
+
+
+    // Update sleep duration average
+    sleepDurationAvgElement.textContent = `${sleepDurationAverage.toFixed(2)} hrs`;
+	sleepDurationAvgText.textContent = `ON AVERAGE ${startDateFormatted} - ${endDateFormatted}`;
+
+    // Update weight average
+    weightAvgElement.textContent = `${weightAverage.toFixed(2)} lbs`;
+	weightAvgText.textContent = `ON AVERAGE ${startDateFormatted} - ${endDateFormatted}`;
+
 	background(255);
 
 	stroke(128, 128, 128);
@@ -240,6 +281,7 @@ function draw() {
 	textSize(16);
 	textAlign(CENTER, TOP);
 
+	noStroke()
 	text("date", width / 2, height - 20);
 
 	//y axis 1
@@ -258,7 +300,7 @@ function draw() {
 	pop();
 
 	stroke(128, 128, 128);
-	strokeWeight(2);
+	strokeWeight(1);
 	//y axis 2
 	line(90, height - 50, 90, 50);
 	//y 2 label
@@ -280,7 +322,7 @@ function draw() {
 	stroke(128, 128, 128);
 	strokeWeight(1);
 	push();
-	translate(width - 15, height / 2);
+	translate(width - 20, height / 2);
 	rotate(-HALF_PI);
 	noStroke();
 	fill("#2F66B9");
@@ -331,11 +373,11 @@ function draw() {
 		push();
 		translate(0, height - 50 - ((height - 100) / (sleepMax / 2000)) * i);
 		stroke(0);
-		line(750, 0, 760, 0);
+		line(width - 40, 0, width - 50, 0);
 
 		noStroke();
 	fill(0);
-		text(i * 2 + "00", 780, -3);
+		text(i * 2 + "00", 962, -3);
 		pop();
 	}
 
@@ -349,11 +391,14 @@ function draw() {
 		let barWidth = (width - 50 - 90) / filteredData.length; // Calculate the width of each bar
 		let barHeight = (((height - 100) / sleepMax) * (parseInt(filteredData[i].getSleep()))); // Calculate the height of each bar
 
-		// Draw a rectangle for each bar
-		rect(x, y, barWidth, barHeight);
-	}
-	noStroke();
-	fill(0);
+		if (document.getElementById('toggle-sleep').checked) {
+			noStroke();
+			fill("#ADD8E6");
+
+			// Draw a rectangle for each bar
+			rect(x, y, barWidth, barHeight);
+		  }
+		}
 
 	//figruing out the min max of HRV
 
@@ -398,16 +443,19 @@ function draw() {
 	// 	pop();
 	// }
 
+// Draw HRV data if the checkbox is checked
+if (document.getElementById('toggle-hrv').checked) {
 	beginShape();
 	noFill(); // This line ensures that there is no fill for the shape
 	stroke("#388D36"); // Set the stroke color to black (you can change this value)
 	strokeWeight(2);
 	for (var i = 0; i < filteredData.length; i++) {
-		let x = 95 + ((width - 50 - 90) / filteredData.length) * i;
-		let y = height - 50 - (((height - 100) / hrvRange) * (parseInt(filteredData[i].getHRV()) - hrvMin));
-		vertex(x, y);
+	  let x = 95 + ((width - 50 - 90) / filteredData.length) * i;
+	  let y = height - 50 - (((height - 100) / hrvRange) * (parseInt(filteredData[i].getHRV()) - hrvMin));
+	  vertex(x, y);
 	}
 	endShape();
+  }
 	// for(var i = 0 ; i < allDataArray.length ; i++){
 	// 	circle(((width - 50-90)/allDataArray.length), allDataArray[i].getHRV(),10);
 	// }
@@ -445,7 +493,7 @@ function draw() {
 		pop();
 	}
 
-
+if (document.getElementById('toggle-weight').checked) {
 	beginShape();
 	noFill(); // This line ensures that there is no fill for the shape
 	stroke("#FF0000"); // Set the stroke color to black (you can change this value)
@@ -457,6 +505,7 @@ function draw() {
 	}
 
 	endShape();
+}
 
 	// for (var i = 0; i < allDataArray.length; i++) {
 	// 	if (parseInt(allDataArray[i].dosage) > 0) {
@@ -507,9 +556,6 @@ function draw() {
 	// endShape();
 
 
-
-
-
 	// determine the min and max values for x and y axes
 
 	let minX = min(filteredData.map(entry => entry.date.getTime()));
@@ -540,91 +586,39 @@ function draw() {
 	// }
 }
 
+
+
 // line graph hover interaction:
 
-// script.js
-
-const graphContainer = document.getElementById('main-sketch-area');
-const summaryData = document.getElementById('summary-data');
-
-graphContainer.addEventListener('mousemove', mouseMoved);
-
-// var dateLength = dates.length;
-
-function mouseMoved(event) {
-  mouseX = event.clientX;
-  mouseY = event.clientY;
-
-  // clear the previous data
-  summaryData.innerHTML = '';
-
-//   var endDate = endDate.setMonth(0);
-//   endDate.setDate(17);
-//   endDate.setFullYear(2024);
-
-//   var startDate = startDate.setMonth(10);
-//   startDate.setDate(8);
-//   startDate.setFullYear(2023);
-
-	// var endDate = Date()
-	// console.log(dateCoordinates.length);
-  // Check if the mouse is over any of the date coordinates
-  for (const { x, date } of dateCoordinates) {
-    const distanceFromDate = dist(mouseX, mouseY, x + 620, height + 220);
-
-	// var monthDiff = Math.abs(endDate.getMonth() - startDate.getMonth());
-	// var dayDiff = Math.abs(endDate.getDate() - startDate.getDate());
-	// var totalDiff = (monthDiff + 1) * dayDiff;
-	// console.log(totalDiff);
-	// distance = 2840 / dateLength;
-
-    if (distanceFromDate < dateCoordinates.length) {
-      // Adjust this value as needed
-      const entry = filteredData[filteredData.findIndex(e => e.getDate().getTime() === date.getTime())];
-      const hrv = entry.getHRV();
-      const weight = entry.weight;
-      const sleep = entry.getSleep();
-      const dateStr = `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
-      const dataHTML = `
-        <p><strong>Date:</strong> ${dateStr}</p>
-        <p><strong>HRV:</strong> ${hrv}</p>
-        <p><strong>Weight:</strong> ${weight}</p>
-        <p><strong>Sleep:</strong> ${sleep}</p>
-      `;
-      summaryData.innerHTML = dataHTML;
-      break;
-    }
-  }
-}
-
-// function mouseMoved() {
-// 	mouseMovedOverGraph();
+//function mouseMoved() {
+//	mouseMovedOverGraph();
 // }
 
-// function mouseMovedOverGraph() {
-// 	const summaryData = document.getElementById('summary-data');
-// 	summaryData.innerHTML = ''; // Clear the previous data
+  //use x position cursor within the space
+  //divide the width by bars
+  function mouseMoved() {
+	const summaryData = document.getElementById('summary-data');
+	summaryData.innerHTML = ''; // Clear the previous data
 
-// 	// Check if the mouse is over any of the date coordinates
-// 	for (const { x, date } of dateCoordinates) {
-// 		const distanceFromDate = dist(mouseX, mouseY, x, height - 50);
-// 		if (distanceFromDate < 10) { // Adjust this value as needed
-// 		const entry = filteredData[filteredData.findIndex(e => e.getDate().getTime() === date.getTime())];
-// 		const hrv = entry.getHRV();
-// 		const weight = entry.weight;
-// 		const sleep = entry.getSleep();
-// 		const dateStr = `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
-// 		const dataHTML = `
-// 			<p><strong>Date:</strong> ${dateStr}</p>
-// 			<p><strong>HRV:</strong> ${hrv}</p>
-// 			<p><strong>Weight:</strong> ${weight}</p>
-// 			<p><strong>Sleep:</strong> ${sleep}</p>
-// 		`;
-// 		summaryData.innerHTML = dataHTML;
-// 		break;
-// 		}
-// 	}
-// }
+	// Check if the mouse is over any of the date coordinates
+	for (const { x, date } of dateCoordinates) {
+		const distanceFromDate = dist(mouseX, mouseY, x, height - 50);
+		if (distanceFromDate < 10) { // Adjust this value as needed
+		const entry = filteredData[filteredData.findIndex(e => e.getDate().getTime() === date.getTime())];
+		const hrv = entry.getHRV();
+		const weight = entry.weight;
+		const sleep = entry.getSleep();
+		const dateStr = `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
+		const dataHTML = `
+			<p><strong>DATE: </strong> ${dateStr}</p>
+			<p><strong>HRV: </strong> ${hrv}</p>
+			<p><strong>WEIGHT: </strong> ${weight}</p>
+			<p><strong>SLEEP: </strong> ${sleep}</p>
+		`;
+		summaryData.innerHTML = dataHTML;
+		break;
+		}
+	}
 	// hoverBox.style('display', 'none'); // Initially hide the hover box
 
 	// // Check if the mouse is over any of the date coordinates
@@ -684,3 +678,5 @@ function scaleLinear() {
 
 	return scale;
 }
+
+// Updating the card averages

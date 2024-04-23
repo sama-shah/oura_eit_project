@@ -120,7 +120,7 @@
     margin-right: 12px;
     height: 100px;
     display: flex;
-    
+    width: 500px;
   }
 
   #add-widget {
@@ -164,8 +164,16 @@
     margin-bottom: 42px;
   }
 
-  .eye {
+  /* .eye {
     margin-left: 5px;
+  } */
+
+  #sleep-duration-avg {
+    color: red;
+  }
+
+  #weight-avg {
+    color: #3268ba;
   }
 
   .right-widget-images {
@@ -204,9 +212,11 @@
     justify-content: flex-end;
     align-items: center;
   }
+
   #start-date{
     margin-right: 2%;
   }
+
   .label{
     display: flex;
     flex-wrap: nowrap;
@@ -279,7 +289,7 @@
     padding-bottom: 2%;
     padding-top: 2%;
     font-size: 24px;
-    color: #565656;
+    color: #727272;
   }
   .summary-placeholder {
     /* width: calc(25% - 10px); */
@@ -290,16 +300,35 @@
     padding-top: 20px;
     background-color: transparent;
     /* Add border */
-    border: 1px solid #696868;
-    border-radius: 5px;
+    border: 1px solid #b2b2b2;
+    border-radius: 10px;
   }
   .summary-text {
     margin-top: 10px;
-    font-size: 20px;
+    font-size: 15px;
     color: #626ea7;
+    text-align: left;
+    padding-left: 10%;
+
+  }
+  .toggle-controls label {
+    display: inline-block;
+    padding: 5px 10px;
+    margin-right: 1px;
+    background-color: #e0e0e0;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 15px;
   }
 
+  .toggle-controls label.active {
+    background-color: #4CAF50;
+    color: white;
+  }
 
+  .toggle-controls label:hover {
+    background-color: #ccc;
+  }
   .chart-placeholder {
     width: calc(75% - 10px);
     text-align: center;

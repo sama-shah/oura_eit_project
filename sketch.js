@@ -287,28 +287,30 @@ function draw() {
     // Update weight average
     weightAvgElement.textContent = `${weightAverage.toFixed(2)} lbs`;
 	weightAvgText.textContent = `ON AVERAGE ${startDateFormatted} - ${endDateFormatted}`;
+	console.log("start date", startDateFormatted)
 
 	background(255);
 
 	stroke(128, 128, 128);
-	strokeWeight(2);
+	strokeWeight(1);
 	//x axis
 
 	//starts at x = 90
 
 	line(90, height - 50, width - 50, height - 50);
 	// x aixs label
-	stroke(128, 128, 128);
-	strokeWeight(1);
+	// stroke(128, 128, 128);
+	// strokeWeight(1);
+	fill(0)
 	textSize(16);
 	textAlign(CENTER, TOP);
 
 	noStroke()
-	text("date", width / 2, height - 20);
+	text("Date", width / 2, height - 20);
 
 	//y axis 1
 	stroke(128, 128, 128);
-	strokeWeight(2);
+	strokeWeight(1);
 	line(40, height - 50, 40, 50);
 	// y axis 1 label
 	stroke(128, 128, 128);
@@ -318,7 +320,7 @@ function draw() {
 	rotate(-HALF_PI);
 	noStroke();
 	fill("#388D36");
-	text("HRV", 0, 0);
+	text("HR Variability (ms)", 0, 0);
 	pop();
 
 	stroke(128, 128, 128);
@@ -333,12 +335,12 @@ function draw() {
 	rotate(-HALF_PI);
 	noStroke();
 	fill("#FF0000");
-	text("Weight", 0, -16);
+	text("Weight (lbs)", 0, -16);
 	pop();
 
 	//y axis 3 (on right)
 	stroke(128, 128, 128);
-	strokeWeight(2);
+	strokeWeight(1);
 	line(width - 50, height - 50, width - 50, 50); // Adjusted the x-coordinate here
 	// y 3 label
 	stroke(128, 128, 128);
@@ -348,7 +350,7 @@ function draw() {
 	rotate(-HALF_PI);
 	noStroke();
 	fill("#2F66B9");
-	text("Sleep", 0, 0);
+	text("Sleep Duration (s)", 0, 0);
 	pop();
 
 
@@ -360,6 +362,7 @@ function draw() {
 	textSize(7);
 	for (var i = 0; i < filteredData.length; i++) {
 		push();
+		noStroke();
 		translate(95 + ((width - 50 - 90) / filteredData.length) * i, height - 50);
 		rotate(QUARTER_PI);
 		text((filteredData[i].getDate().getMonth()) + 1 + "/" + (filteredData[i].getDate().getDate()) + "/" + (filteredData[i].getDate().getFullYear()), 0, 0);
@@ -394,7 +397,7 @@ function draw() {
 	}
 
 	stroke(0); // Set the stroke color to black (you can change this value)
-	strokeWeight(2); // Set the stroke weight (thickness) of the bars
+	strokeWeight(1); // Set the stroke weight (thickness) of the bars
 	noStroke();
 	fill("#ADD8E6");
 	for (var i = 0; i < filteredData.length; i++) {
@@ -470,7 +473,7 @@ if (document.getElementById('toggle-hrv').checked) {
 	beginShape();
 	noFill(); // This line ensures that there is no fill for the shape
 	stroke("#388D36"); // Set the stroke color to black (you can change this value)
-	strokeWeight(2);
+	strokeWeight(1);
 	for (var i = 0; i < filteredData.length; i++) {
 	  let x = 95 + ((width - 50 - 90) / filteredData.length) * i;
 	  let y = height - 50 - (((height - 100) / hrvRange) * (parseInt(filteredData[i].getHRV()) - hrvMin));
@@ -519,7 +522,7 @@ if (document.getElementById('toggle-weight').checked) {
 	beginShape();
 	noFill(); // This line ensures that there is no fill for the shape
 	stroke("#FF0000"); // Set the stroke color to black (you can change this value)
-	strokeWeight(2);
+	strokeWeight(1);
 	for (var i = 0; i < filteredData.length; i++) {
 		let x = 95 + ((width - 50 - 90) / filteredData.length) * i;
 		let y = height - 50 - (((height - 100) / weightRange) * (parseInt(filteredData[i].weight) - weightMin));
@@ -547,7 +550,7 @@ if (document.getElementById('toggle-weight').checked) {
 			push(); // Save the current canvas state
 			translate(x, height - 50); // Translate to the center of the line
 			stroke(150); // Set stroke color to gray
-			strokeWeight(2); // Set thickness of the line
+			strokeWeight(1); // Set thickness of the line
 
 			for (let yDash = 0; yDash < height - 100; yDash += 10) {
 				line(0, -yDash, 0, -(yDash + 5)); // Draw dashed line segments with negative y values to move higher up

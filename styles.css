@@ -61,6 +61,48 @@
   input[type="file"] {
     display: none;
   }
+
+  .upload-download {
+    margin-left: 20px; /* Add margin-left to the upload-download section */
+  }
+
+  /* .upload-download .btn {
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+    border-radius: 6px;
+  } */
+
+  #upload-button1 {
+    /* border: 0px solid  #000000; */
+    color: rgb(0, 0, 0);
+    padding: 6px 12px;
+    border-radius: 6px;
+  }
+
+  #upload-button1:hover {
+    cursor: pointer;
+  }
+
+  /* .toggle-controls label {
+    display: inline-block;
+    padding: 5px 10px;
+    margin-right: 1px;
+    background-color: #e0e0e0;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 15px;
+  }
+
+  .toggle-controls label.active {
+    background-color: #4CAF50;
+    color: white;
+  }
+
+  .toggle-controls label:hover {
+    background-color: #ccc;
+  } */
   
   .form-control {
     border: 1px solid #ccc;
@@ -73,6 +115,10 @@
     font-size: 12px;
   }
 
+  .form-control:hover {
+    border: 1px solid #223AA3;
+  }
+
   .medication-info {
     display: flex;
     justify-content: space-between;
@@ -81,7 +127,7 @@
   .medication-block {
     text-align: center;
     margin-left: 20px;
-    border-left: 5px solid red;
+    border-left: 5px solid #E92760;
     padding-left: 10px;
     text-align: left;
   }
@@ -127,6 +173,10 @@
     background-color: #F5F7FA;
     display: flex;
     justify-content: center;
+  }
+
+  #add-widget:hover {
+    background-color: #e8ecf0;
   }
 
   #add-widget img {
@@ -190,6 +240,7 @@
     justify-content: center;
     right: 0;
     align-items: center;
+    margin-top: 35px;
   }
 
   /* chart controls */
@@ -224,7 +275,7 @@
     margin-right: 3%;
   }
 
-  .segmented-control {
+  /* .segmented-control {
     display: flex;
     background-color: #e0e0e0;
     border-radius: 10px;
@@ -257,7 +308,8 @@
     border-radius: 10px;
     border-color: black;
     border: 1px solid #000000;
-  }
+  } */
+
   .chart-controls input[type="date"],
   .chart-controls select {
     padding: 10px;
@@ -265,11 +317,9 @@
     border-radius: 10px;
     cursor: pointer;
   }
-  .btn.ml-2 {
-    background-color: rgb(156, 156, 156);
-    color: rgb(0, 0, 0);
-    padding: -10px;
-  }
+
+
+  
 
   .graph-area{
     display: flex;
@@ -315,10 +365,11 @@
     display: inline-block;
     padding: 5px 10px;
     margin-right: 1px;
-    background-color: #e0e0e0;
-    border-radius: 20px;
+    background-color: #F5F7FA;
+    border-radius: 6px;
     cursor: pointer;
-    font-size: 15px;
+    color: #6D6D6D;
+    font-size: 10pt;
   }
 
   .toggle-controls label.active {
@@ -327,7 +378,7 @@
   }
 
   .toggle-controls label:hover {
-    background-color: #ccc;
+    background-color: #e8ecf0;
   }
   .chart-placeholder {
     width: calc(75% - 10px);
@@ -362,17 +413,18 @@
     }
   }
 
-  .upload-download {
-    margin-left: 20px; /* Add margin-left to the upload-download section */
+ 
+  #toggle-visibility {
+    font-size: 14px;
+    color: #000000;
+  }
+ 
+  #date-label {
+    font-size: 14px;
+    color: #000000;
+    /* color: #BEBEBE; */
   }
 
-  .upload-download .btn {
-    border: none;
-    padding: 10px 20px;
-    cursor: pointer;
-    transition: background-color 0.2s ease-in-out;
-    border-radius: 6px;
-  }
 
   .canvasjs-chart .axis { /* Targets the axis labels */
     font-family: Arial, sans-serif; /* Change font family here */

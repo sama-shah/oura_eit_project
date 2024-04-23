@@ -2,7 +2,7 @@ let sleepPeriodsFile;
 let weightFile;
 let allData = {};
 let allDataArray = [];
-let hrvRange;
+let hrvRange = 0;
 let hrvMin;
 let dateCoordinates = [];
 let filteredData = [];
@@ -111,7 +111,7 @@ document.getElementById("upload-button1").addEventListener("click", (e) => {
 					}
 
 				}
-				console.log(filteredData);
+				console.log("filteredData 1: ", filteredData);
 				draw();
 			});
 
@@ -159,6 +159,7 @@ class DataEntry {
 		this.rem = rem;
 		this.awake = awake;
 		this.hrv = hrv;
+		this.sleep = parseInt(this.deep) + parseInt(this.light) + parseInt(this.rem) + parseInt(this.awake);
 	}
 
 	getDate() {
@@ -331,7 +332,7 @@ function draw() {
 
 
 
-	console.log(filteredData.length);
+	console.log("filteredData length:", filteredData.length);
 	//placing the date x axis
 	//rotate(45);
 	textAlign(LEFT, TOP);
@@ -355,17 +356,7 @@ function draw() {
 		}
 	}
 
-	 // Store the x and y-coordinates of the dates
-	 for (let i = 0; i < filteredData.length; i++) {
-		const x = 95 + ((width - 50 - 90) / filteredData.length) * i;
-		const date = filteredData[i].getDate();
-
-
-
-		dateCoordinates.push({ x, date });
-	  }
-
-	console.log("sleep max" + sleepMax);
+	// console.log("sleep max" + sleepMax);
 	noStroke();
 	fill(0);
 
@@ -421,7 +412,7 @@ function draw() {
 	hrvMin -= 3;
 
 	var hrvRange = hrvMax - hrvMin + 1;
-	console.log("range: " + hrvRange);
+	// console.log("range: " + hrvRange);
 	//placing the y axis
 	//line(40, height - 50, 40, 50);
 	for (var i = 0; i < hrvRange; i++) {
@@ -432,9 +423,19 @@ function draw() {
 		noStroke();
 	fill(0);
 		text(hrvMin + i, 20, -3);
-		console.log(hrvMin + i);
+		// console.log(hrvMin + i);
 		pop();
 	}
+
+		 // store the x and y-coordinates of the dates
+		 for (let i = 0; i < filteredData.length; i++) {
+			const x = 95 + ((width - 50 - 90) / filteredData.length) * i;
+			const date = filteredData[i].getDate();
+
+			const y = height - 50 - filteredData[i].getHRV() * (height - 100) / hrvRange;
+
+			dateCoordinates.push({ x, y, date });
+		  }
 
 	//draw hrv data points
 	// for (var i = 0; i < allDataArray.length; i++) {
@@ -480,7 +481,7 @@ if (document.getElementById('toggle-hrv').checked) {
 	weightMin -= 3;
 	var weightRange = weightMax - weightMin + 1;
 
-	console.log("weight range" + weightRange);
+	// console.log("weight range" + weightRange);
 
 	for (var i = 0; i < weightRange; i++) {
 		push();
@@ -586,39 +587,163 @@ if (document.getElementById('toggle-weight').checked) {
 	// }
 }
 
-
-
 // line graph hover interaction:
 
+// Helper function to get the mouse position relative to an element
+function getMousePosition(event, element) {
+	const rect = element.getBoundingClientRect();
+	return {
+	  x: event.clientX - rect.left,
+	  y: event.clientY - rect.top
+	};
+  }
+
+  // Helper function to calculate the distance between two points
+  function calculateDistance(x1, y1, x2, y2) {
+	const xDiff = x2 - x1;
+	const yDiff = y2 - y1;
+	return Math.sqrt(xDiff * xDiff + yDiff * yDiff);
+  }
+
+  // Hover functionality
+  const graphContainer = document.getElementById('main-sketch-area');
+  const summaryData = document.getElementById('summary-data');
+  graphContainer.addEventListener('mousemove', mouseMoved);
+
+  function mouseMoved(event) {
+	const { x, y } = getMousePosition(event, graphContainer);
+
+	// Clear the previous data
+	summaryData.innerHTML = '';
+
+	// Find the closest date coordinate to the mouse position
+	let closestDate = null;
+	let closestDistance = Infinity;
+
+	for (const { x: dateX, y: dateY, date } of dateCoordinates) {
+	  const distance = calculateDistance(x, y - 220, dateX, dateY);
+	  if (distance < closestDistance) {
+		closestDate = date;
+		closestDistance = distance;
+	  }
+	}
+
+	// If a close enough date coordinate was found, update the summary data
+	if (closestDistance < 15) { // Use a fixed threshold for now
+	  const entry = filteredData.find(e => e.getDate().getTime() === closestDate.getTime());
+	  if (entry) {
+		const hrv = entry.getHRV();
+		const weight = entry.weight;
+		const sleep = entry.getSleep();
+		const dateStr = `${closestDate.getMonth() + 1}/${closestDate.getDate()}/${closestDate.getFullYear()}`;
+		const dataHTML = `
+		  <p><strong>Date:</strong> ${dateStr}</p>
+		  <p><strong>HRV:</strong> ${hrv}</p>
+		  <p><strong>Weight:</strong> ${weight}</p>
+		  <p><strong>Sleep:</strong> ${sleep}</p>
+		`;
+		summaryData.innerHTML = dataHTML;
+	  }
+	}
+  }
 //function mouseMoved() {
 //	mouseMovedOverGraph();
 // }
 
   //use x position cursor within the space
   //divide the width by bars
-  function mouseMoved() {
-	const summaryData = document.getElementById('summary-data');
-	summaryData.innerHTML = ''; // Clear the previous data
 
-	// Check if the mouse is over any of the date coordinates
-	for (const { x, date } of dateCoordinates) {
-		const distanceFromDate = dist(mouseX, mouseY, x, height - 50);
-		if (distanceFromDate < 10) { // Adjust this value as needed
-		const entry = filteredData[filteredData.findIndex(e => e.getDate().getTime() === date.getTime())];
-		const hrv = entry.getHRV();
-		const weight = entry.weight;
-		const sleep = entry.getSleep();
-		const dateStr = `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
-		const dataHTML = `
-			<p><strong>DATE: </strong> ${dateStr}</p>
-			<p><strong>HRV: </strong> ${hrv}</p>
-			<p><strong>WEIGHT: </strong> ${weight}</p>
-			<p><strong>SLEEP: </strong> ${sleep}</p>
-		`;
-		summaryData.innerHTML = dataHTML;
-		break;
-		}
-	}
+//   function calculateDistance(x1, y1, x2, y2) {
+// 	const xDiff = x2 - x1;
+// 	const yDiff = y2 - y1;
+// 	return Math.sqrt(xDiff * xDiff + yDiff * yDiff);
+//   }
+
+// const graphContainer = document.getElementById('main-sketch-area');
+// const summaryData = document.getElementById('summary-data');
+
+// console.log('graphContainer:', graphContainer);
+// console.log('summaryData:', summaryData);
+
+// graphContainer.addEventListener('mousemove', mouseMoved);
+
+// // var dateLength = dates.length;
+
+// function mouseMoved(event) {
+//   mouseX = event.clientX;
+//   mouseY = event.clientY;
+
+//   const graphContainerRect = graphContainer.getBoundingClientRect();
+//   console.log('graphContainer width:', graphContainerRect.width);
+//   console.log('graphContainer height:', graphContainerRect.height);
+
+//   // clear the previous data
+//   summaryData.innerHTML = '';
+
+// //   var endDate = endDate.setMonth(0);
+// //   endDate.setDate(17);
+// //   endDate.setFullYear(2024);
+
+// //   var startDate = startDate.setMonth(10);
+// //   startDate.setDate(8);
+// //   startDate.setFullYear(2023);
+
+// 	// var endDate = Date()
+// 	// console.log(dateCoordinates.length);
+//   // Check if the mouse is over any of the date coordinates
+//   for (const { x, y, date } of dateCoordinates) {
+// 	// console.log('dateCoordinates:', dateCoordinates);
+// 	// console.log('filteredData:', filteredData);
+//     const distanceFromDate = calculateDistance(mouseX, mouseY, x, y);
+// 	console.log('mouseX:', mouseX, 'mouseY:', mouseY, 'x:', x, 'y:', y, 'distanceFromDate:', distanceFromDate);
+
+// 	// var monthDiff = Math.abs(endDate.getMonth() - startDate.getMonth());
+// 	// var dayDiff = Math.abs(endDate.getDate() - startDate.getDate());
+// 	// var totalDiff = (monthDiff + 1) * dayDiff;
+// 	// console.log(totalDiff);
+// 	// distance = 2840 / dateLength;
+
+//     if (distanceFromDate < dateCoordinates.length) {
+//       // Adjust this value as needed
+//       const entry = filteredData[filteredData.findIndex(e => e.getDate().getTime() === date.getTime())];
+// 	  if(entry){
+// 		const hrv = entry.getHRV();
+// 		const weight = entry.weight;
+// 		const sleep = entry.getSleep();
+// 		const dateStr = `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
+// 		const dataHTML = `
+// 		  <p><strong>Date:</strong> ${dateStr}</p>
+// 		  <p><strong>HRV:</strong> ${hrv}</p>
+// 		  <p><strong>Weight:</strong> ${weight}</p>
+// 		  <p><strong>Sleep:</strong> ${sleep}</p>
+// 		`;
+// 		summaryData.innerHTML = dataHTML;
+// 		break;
+// 	  }
+//     }
+//   }
+// }
+	// const summaryData = document.getElementById('summary-data');
+	// summaryData.innerHTML = ''; // Clear the previous data
+
+	// // Check if the mouse is over any of the date coordinates
+	// for (const { x, date } of dateCoordinates) {
+	// 	const distanceFromDate = dist(mouseX, mouseY, x, height - 50);
+	// 	if (distanceFromDate < 10) { // Adjust this value as needed
+	// 	const entry = filteredData[filteredData.findIndex(e => e.getDate().getTime() === date.getTime())];
+	// 	const hrv = entry.getHRV();
+	// 	const weight = entry.weight;
+	// 	const sleep = entry.getSleep();
+	// 	const dateStr = `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
+	// 	const dataHTML = `
+	// 		<p><strong>DATE: </strong> ${dateStr}</p>
+	// 		<p><strong>HRV: </strong> ${hrv}</p>
+	// 		<p><strong>WEIGHT: </strong> ${weight}</p>
+	// 		<p><strong>SLEEP: </strong> ${sleep}</p>
+	// 	`;
+	// 	summaryData.innerHTML = dataHTML;
+	// 	break;
+	// 	}
 	// hoverBox.style('display', 'none'); // Initially hide the hover box
 
 	// // Check if the mouse is over any of the date coordinates

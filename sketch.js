@@ -280,7 +280,7 @@ function draw() {
 	stroke(128, 128, 128);
 	strokeWeight(1);
 	push();
-	translate(width - 15, height / 2);
+	translate(width - 20, height / 2);
 	rotate(-HALF_PI);
 	noStroke();
 	fill("#2F66B9");
@@ -328,11 +328,11 @@ function draw() {
 		push();
 		translate(0, height - 50 - ((height - 100) / (sleepMax / 2000)) * i);
 		stroke(0);
-		line(750, 0, 760, 0);
+		line(width - 40, 0, width - 50, 0);
 		
 		noStroke();
 	fill(0);
-		text(i * 2 + "00", 780, -3);
+		text(i * 2 + "00", 962, -3);
 		pop();
 	}
 
@@ -535,12 +535,19 @@ function draw() {
 	// }
 }
 
+
+//toggle true false
+//checkbox event listener
+//if statement 
+
 // line graph hover interaction:
 
-function mouseMoved() {
-	mouseMovedOverGraph();
-  }
-  
+//function mouseMoved() {
+//	mouseMovedOverGraph();
+// }
+
+  //use x position cursor within the space 
+  //divide the width by bars 
   function mouseMoved() {
 	const summaryData = document.getElementById('summary-data');
 	summaryData.innerHTML = ''; // Clear the previous data
@@ -555,10 +562,10 @@ function mouseMoved() {
 		const sleep = entry.getSleep();
 		const dateStr = `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
 		const dataHTML = `
-			<p><strong>Date:</strong> ${dateStr}</p>
-			<p><strong>HRV:</strong> ${hrv}</p>
-			<p><strong>Weight:</strong> ${weight}</p>
-			<p><strong>Sleep:</strong> ${sleep}</p>
+			<p><strong>DATE: </strong> ${dateStr}</p>
+			<p><strong>HRV: </strong> ${hrv}</p>
+			<p><strong>WEIGHT: </strong> ${weight}</p>
+			<p><strong>SLEEP: </strong> ${sleep}</p>
 		`;
 		summaryData.innerHTML = dataHTML;
 		break;

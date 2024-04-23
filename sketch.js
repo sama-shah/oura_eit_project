@@ -5,6 +5,7 @@ let allDataArray = [];
 let hrvRange;
 let hrvMin;
 let dateCoordinates = [];
+let filteredData = [];
 
 // Get the selected file when input changes
 // document.getElementById("sleepperiods").addEventListener("change", (event) => {
@@ -21,7 +22,8 @@ var deep = [];
 var light = [];
 var weight = [];
 
-
+document.getElementById('start-date').addEventListener('change', draw);
+document.getElementById('end-date').addEventListener('change', draw);
 
 // Handle upload button click
 document.getElementById("upload-button1").addEventListener("click", (e) => {
@@ -64,7 +66,7 @@ document.getElementById("upload-button1").addEventListener("click", (e) => {
 				var DE = new DataEntry(dateObject, result[i].deep_sleep_duration, result[i].light_sleep_duration, result[i].rem_sleep_duration, result[i].awake_time, result[i].average_hrv);
 
 				allData[result[i].day] = DE;
-				allDataArray.push(DE);
+				filteredData.push(DE);
 
 
 			}
@@ -108,7 +110,7 @@ document.getElementById("upload-button1").addEventListener("click", (e) => {
 					}
 
 				}
-				console.log(allDataArray);
+				console.log(filteredData);
 				draw();
 			});
 
@@ -200,6 +202,29 @@ function setup() {
 
 function draw() {
 
+	const startDateInput = document.getElementById('start-date');
+	const endDateInput = document.getElementById('end-date');
+
+	let startDate = null;
+	let endDate = null;
+
+	if (startDateInput.value) {
+		startDate = new Date(startDateInput.value);
+	}
+
+	if (endDateInput.value) {
+		endDate = new Date(endDateInput.value);
+	}
+
+	filteredData = allDataArray;
+
+	if (startDate && endDate) {
+	  filteredData = allDataArray.filter(entry => {
+		const entryDate = entry.getDate();
+		return entryDate >= startDate && entryDate <= endDate;
+	  });
+	}
+
 	background(255);
 
 	stroke(128, 128, 128);
@@ -264,34 +289,34 @@ function draw() {
 
 	
 
-	console.log(allDataArray.length);
+	console.log(filteredData.length);
 	//placing the date x axis
 	//rotate(45);
 	textAlign(LEFT, TOP);
 	textSize(7);
-	for (var i = 0; i < allDataArray.length; i++) {
+	for (var i = 0; i < filteredData.length; i++) {
 		push();
-		translate(95 + ((width - 50 - 90) / allDataArray.length) * i, height - 50);
+		translate(95 + ((width - 50 - 90) / filteredData.length) * i, height - 50);
 		rotate(QUARTER_PI);
-		text((allDataArray[i].getDate().getMonth()) + 1 + "/" + (allDataArray[i].getDate().getDate()) + "/" + (allDataArray[i].getDate().getFullYear()), 0, 0);
+		text((filteredData[i].getDate().getMonth()) + 1 + "/" + (filteredData[i].getDate().getDate()) + "/" + (filteredData[i].getDate().getFullYear()), 0, 0);
 		//console.log(allDataArray[i].getDate());
 		//console.log(90 + ((width - 50-90)/allDataArray.length)*i);
 		pop();
 	}
 
-	var sleepMax = parseInt(allDataArray[0].getSleep());
+	var sleepMax = parseInt(filteredData[0].getSleep());
 
-	for (var i = 0; i < allDataArray.length; i++) {
-		var currentSleep = parseInt(allDataArray[i].getSleep());
+	for (var i = 0; i < filteredData.length; i++) {
+		var currentSleep = parseInt(filteredData[i].getSleep());
 		if (currentSleep > sleepMax) {
 			sleepMax = currentSleep;
 		}
 	}
 
 	 // Store the x-coordinates of the dates
-	 for (let i = 0; i < allDataArray.length; i++) {
-		const x = 95 + ((width - 50 - 90) / allDataArray.length) * i;
-		const date = allDataArray[i].getDate();
+	 for (let i = 0; i < filteredData.length; i++) {
+		const x = 95 + ((width - 50 - 90) / filteredData.length) * i;
+		const date = filteredData[i].getDate();
 		dateCoordinates.push({ x, date });
 	  }
 
@@ -315,11 +340,11 @@ function draw() {
 	strokeWeight(2); // Set the stroke weight (thickness) of the bars
 	noStroke();
 	fill("#ADD8E6");
-	for (var i = 0; i < allDataArray.length; i++) {
-		let x = 90 + ((width - 50 - 90) / allDataArray.length) * i;
-		let y = height - 50 - (((height - 100) / sleepMax) * (parseInt(allDataArray[i].getSleep())));
-		let barWidth = (width - 50 - 90) / allDataArray.length; // Calculate the width of each bar
-		let barHeight = (((height - 100) / sleepMax) * (parseInt(allDataArray[i].getSleep()))); // Calculate the height of each bar
+	for (var i = 0; i < filteredData.length; i++) {
+		let x = 90 + ((width - 50 - 90) / filteredData.length) * i;
+		let y = height - 50 - (((height - 100) / sleepMax) * (parseInt(filteredData[i].getSleep())));
+		let barWidth = (width - 50 - 90) / filteredData.length; // Calculate the width of each bar
+		let barHeight = (((height - 100) / sleepMax) * (parseInt(filteredData[i].getSleep()))); // Calculate the height of each bar
 
 		// Draw a rectangle for each bar
 		rect(x, y, barWidth, barHeight);
@@ -330,11 +355,11 @@ function draw() {
 	//figruing out the min max of HRV
 
 
-	var hrvMax = parseInt(allDataArray[0].getHRV());
-	var hrvMin = parseInt(allDataArray[0].getHRV());
+	var hrvMax = parseInt(filteredData[0].getHRV());
+	var hrvMin = parseInt(filteredData[0].getHRV());
 
-	for (var i = 0; i < allDataArray.length; i++) {
-		var currentHRV = parseInt(allDataArray[i].getHRV());
+	for (var i = 0; i < filteredData.length; i++) {
+		var currentHRV = parseInt(filteredData[i].getHRV());
 		if (currentHRV < hrvMin) {
 			hrvMin = currentHRV;
 
@@ -374,9 +399,9 @@ function draw() {
 	noFill(); // This line ensures that there is no fill for the shape
 	stroke("#388D36"); // Set the stroke color to black (you can change this value)
 	strokeWeight(2);
-	for (var i = 0; i < allDataArray.length; i++) {
-		let x = 95 + ((width - 50 - 90) / allDataArray.length) * i;
-		let y = height - 50 - (((height - 100) / hrvRange) * (parseInt(allDataArray[i].getHRV()) - hrvMin));
+	for (var i = 0; i < filteredData.length; i++) {
+		let x = 95 + ((width - 50 - 90) / filteredData.length) * i;
+		let y = height - 50 - (((height - 100) / hrvRange) * (parseInt(filteredData[i].getHRV()) - hrvMin));
 		vertex(x, y);
 	}
 	endShape();
@@ -385,13 +410,13 @@ function draw() {
 	// }
 	noStroke();
 	fill(0);
-	var weightMax = parseInt(allDataArray[0].weight);
-	var weightMin = parseInt(allDataArray[0].weight);
+	var weightMax = parseInt(filteredData[0].weight);
+	var weightMin = parseInt(filteredData[0].weight);
 	// var weightMax = -Infinity;
 	// var weightMin = Infinity;
 
-	for (var i = 0; i < allDataArray.length; i++) {
-		var currentWeight = parseInt(allDataArray[i].weight);
+	for (var i = 0; i < filteredData.length; i++) {
+		var currentWeight = parseInt(filteredData[i].weight);
 		if (currentWeight < weightMin) {
 			weightMin = currentWeight;
 
@@ -422,9 +447,9 @@ function draw() {
 	noFill(); // This line ensures that there is no fill for the shape
 	stroke("#FF0000"); // Set the stroke color to black (you can change this value)
 	strokeWeight(2);
-	for (var i = 0; i < allDataArray.length; i++) {
-		let x = 95 + ((width - 50 - 90) / allDataArray.length) * i;
-		let y = height - 50 - (((height - 100) / weightRange) * (parseInt(allDataArray[i].weight) - weightMin));
+	for (var i = 0; i < filteredData.length; i++) {
+		let x = 95 + ((width - 50 - 90) / filteredData.length) * i;
+		let y = height - 50 - (((height - 100) / weightRange) * (parseInt(filteredData[i].weight) - weightMin));
 		vertex(x, y);
 	}
 
@@ -440,9 +465,9 @@ function draw() {
 	// 	}
 		
 	// }
-	for (var i = 0; i < allDataArray.length; i++) {
-		if (parseInt(allDataArray[i].dosage) > 0) {
-			let x = 95 + ((width - 50 - 90) / allDataArray.length) * i; // X-coordinate for text
+	for (var i = 0; i < filteredData.length; i++) {
+		if (parseInt(filteredData[i].dosage) > 0) {
+			let x = 95 + ((width - 50 - 90) / filteredData.length) * i; // X-coordinate for text
 			let y = height - 50 - (height - 100); // Y-coordinate for text
 	
 			push(); // Save the current canvas state
@@ -460,7 +485,7 @@ function draw() {
 			fill(0); // Set fill color to black
 			noStroke(); // Remove stroke
 			textAlign(CENTER, BOTTOM); // Align text horizontally to center and vertically to bottom
-			text(allDataArray[i].dosage+ " mg", x, y); // Draw dosage value
+			text(filteredData[i].dosage+ " mg", x, y); // Draw dosage value
 		}
 	}
 	
@@ -484,10 +509,10 @@ function draw() {
 
 	// determine the min and max values for x and y axes
 
-	let minX = min(allDataArray.map(entry => entry.date.getTime()));
-	let maxX = max(allDataArray.map(entry => entry.date.getTime()));
-	let minY = min(allDataArray.map(entry => min(entry.deep, entry.light, entry.hrv)));
-	let maxY = max(allDataArray.map(entry => max(entry.deep, entry.light, entry.hrv)));
+	let minX = min(filteredData.map(entry => entry.date.getTime()));
+	let maxX = max(filteredData.map(entry => entry.date.getTime()));
+	let minY = min(filteredData.map(entry => min(entry.deep, entry.light, entry.getHrv())));
+	let maxY = max(filteredData.map(entry => max(entry.deep, entry.light, entry.getHrv())));
 
 	// map data points to canvas coordinates
 	let mapX = scaleLinear()
@@ -524,7 +549,7 @@ function mouseMoved() {
 	for (const { x, date } of dateCoordinates) {
 		const distanceFromDate = dist(mouseX, mouseY, x, height - 50);
 		if (distanceFromDate < 10) { // Adjust this value as needed
-		const entry = allDataArray[allDataArray.findIndex(e => e.getDate().getTime() === date.getTime())];
+		const entry = filteredData[filteredData.findIndex(e => e.getDate().getTime() === date.getTime())];
 		const hrv = entry.getHRV();
 		const weight = entry.weight;
 		const sleep = entry.getSleep();

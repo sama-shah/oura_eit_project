@@ -239,15 +239,36 @@ function draw() {
     // Calculate average HRV and sleep duration
 	// console.log(entry instanceof DataEntry); // Should log true
 	// console.log(entry); // Check what 'entry' contains
-    const hrvValues = filteredData.map(entry => entry.getHRV());
-    const hrvAverage = hrvValues.reduce((sum, value) => sum + value, 0) / hrvValues.length;
 
-    const sleepDurationValues = filteredData.map(entry => entry.getSleep() / 3600);
-    const sleepDurationAverage = sleepDurationValues.reduce((sum, value) => sum + value, 0) / sleepDurationValues.length;
+// 	const hrvValues = filteredData.map(entry => parseFloat(entry.getHRV()));
+//   const hrvAverage = hrvValues.length > 0 ? hrvValues.reduce((sum, value) => sum + value, 0) / hrvValues.length : 0;
+//   console.log("HRV Values:", hrvValues);
 
-    // Calculate average weight
-    const weightValues = filteredData.map(entry => weight); // getWeight()???
-    const weightAverage = weightValues.reduce((sum, value) => sum + value, 0) / weightValues.length;
+//     // const hrvValues = filteredData.map(entry => parseFloat(entry.getHRV()));
+//     // const hrvAverage = hrvValues.reduce((sum, value) => sum + value, 0) / hrvValues.length;
+
+//     const sleepDurationValues = filteredData.map(entry => entry.getSleep() / 3600);
+//     const sleepDurationAverage = sleepDurationValues.reduce((sum, value) => sum + value, 0) / sleepDurationValues.length;
+
+//     // Calculate average weight
+// 	const weightValues = filteredData.map(entry => parseFloat(entry.weight));
+//   const weightAverage = weightValues.length > 0 ? weightValues.reduce((sum, value) => sum + value, 0) / weightValues.length : 0;
+//   console.log("Weight Values:", weightValues);
+
+    // const weightValues = filteredData.map(entry => parseFloat(entry.weight)); // getWeight()???
+    // const weightAverage = weightValues.reduce((sum, value) => sum + value, 0) / weightValues.length;
+
+	const hrvValues = filteredData.map(entry => parseFloat(entry.getHRV())).filter(value => !isNaN(value));
+	const hrvAverage = hrvValues.length > 0 ? hrvValues.reduce((sum, value) => sum + value, 0) / hrvValues.length : 0;
+	
+	// Calculate average sleep duration
+	const sleepDurationValues = filteredData.map(entry => entry.getSleep() / 3600);
+	const sleepDurationAverage = sleepDurationValues.reduce((sum, value) => sum + value, 0) / sleepDurationValues.length;
+	
+	// Filter out NaN values for weight
+	const weightValues = filteredData.map(entry => parseFloat(entry.weight)).filter(value => !isNaN(value));
+	const weightAverage = weightValues.length > 0 ? weightValues.reduce((sum, value) => sum + value, 0) / weightValues.length : 0;
+	
 
 	// format start and end dates
 	// Format the start and end dates

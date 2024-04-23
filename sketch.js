@@ -351,7 +351,7 @@ function draw() {
 	rotate(-HALF_PI);
 	noStroke();
 	fill("#3268ba");
-	text("Sleep Duration (s)", 0, 0);
+	text("Sleep Duration (hrs)", 0, 0);
 	pop();
 
 	
@@ -392,22 +392,22 @@ function draw() {
 	noStroke();
 	fill(0);
 
-	for (var i = 0; i < sleepMax / 2000; i++) {
+	for (var i = 0; i < sleepMax / 3600; i++) {
 		push();
-		translate(0, height - 50 - ((height - 100) / (sleepMax / 2000)) * i);
+		translate(0, height - 50 - ((height - 100) / (sleepMax / 3600)) * i);
 		stroke(0);
 		line(width-40, 0, width-50, 0);
 		
 		noStroke();
 	fill(0);
-		text(i * 2 + "00", 962, -3);
+		text(i , 962, -3);
 		pop();
 	}
 
 	stroke(0); // Set the stroke color to black (you can change this value)
 	strokeWeight(1); // Set the stroke weight (thickness) of the bars
 	noStroke();
-	fill("#9cbbe8");
+	fill("#D6E8FF");
 	for (var i = 0; i < filteredData.length; i++) {
 		let x = 90 + ((width - 50 - 90) / filteredData.length) * i;
 		let y = height - 50 - (((height - 100) / sleepMax) * (parseInt(filteredData[i].getSleep())));
@@ -416,7 +416,7 @@ function draw() {
 
 		if (document.getElementById('toggle-sleep').checked) {
 			noStroke();
-			fill("#9cbbe8");
+			fill("#D6E8FF");
 
 			// Draw a rectangle for each bar
 			rect(x, y, barWidth, barHeight);
@@ -471,7 +471,7 @@ if (document.getElementById('toggle-hrv').checked) {
 	beginShape();
 	noFill(); // This line ensures that there is no fill for the shape
 	stroke("#388D36"); // Set the stroke color to black (you can change this value)
-	strokeWeight(1);
+	strokeWeight(2);
 	for (var i = 0; i < filteredData.length; i++) {
 	  let x = 95 + ((width - 50 - 90) / filteredData.length) * i;
 	  let y = height - 50 - (((height - 100) / hrvRange) * (parseInt(filteredData[i].getHRV()) - hrvMin));
@@ -520,7 +520,7 @@ if (document.getElementById('toggle-weight').checked) {
 	beginShape();
 	noFill(); // This line ensures that there is no fill for the shape
 	stroke("#FF0000"); // Set the stroke color to black (you can change this value)
-	strokeWeight(1);
+	strokeWeight(2);
 	for (var i = 0; i < filteredData.length; i++) {
 		let x = 95 + ((width - 50 - 90) / filteredData.length) * i;
 		let y = height - 50 - (((height - 100) / weightRange) * (parseInt(filteredData[i].weight) - weightMin));
@@ -623,13 +623,13 @@ if (document.getElementById('toggle-weight').checked) {
 		const entry = filteredData[filteredData.findIndex(e => e.getDate().getTime() === date.getTime())];
 		const hrv = entry.getHRV();
 		const weight = entry.weight;
-		const sleep = entry.getSleep();
+		const sleep = parseInt(entry.getSleep())/3600;
 		const dateStr = `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
 		const dataHTML = `
 			<p><strong>Date:</strong> ${dateStr}</p>
-			<p><strong>HRV:</strong> ${hrv}</p>
-			<p><strong>Weight:</strong> ${weight}</p>
-			<p><strong>Sleep:</strong> ${sleep}</p>
+			<p><strong>HRV:</strong> ${hrv} ms </p>
+			<p><strong>Weight:</strong> ${weight} lbs </p>
+			<p><strong>Sleep:</strong> ${sleep} hours</p>
 		`;
 		summaryData.innerHTML = dataHTML;
 		break;

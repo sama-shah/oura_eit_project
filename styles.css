@@ -233,11 +233,11 @@
   } */
 
   #sleep-duration-avg {
-    color: red;
+    color: #3268ba;
   }
 
   #weight-avg {
-    color: #3268ba;
+    color: red;
     /* color: #9cbbe8; */
     /* color: #739ad3; */
     /* color: #5886cb;

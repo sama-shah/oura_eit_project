@@ -302,8 +302,7 @@ function draw() {
 	strokeWeight(1);
 	textSize(16);
 	textAlign(CENTER, TOP);
-
-	noStroke()
+	
 	text("date", width / 2, height - 20);
 
 	//y axis 1
@@ -351,7 +350,7 @@ function draw() {
 	text("Sleep", 0, 0);
 	pop();
 
-
+	
 
 	console.log("filteredData length:", filteredData.length);
 	//placing the date x axis
@@ -377,7 +376,14 @@ function draw() {
 		}
 	}
 
-	// console.log("sleep max" + sleepMax);
+	 // Store the x-coordinates of the dates
+	 for (let i = 0; i < filteredData.length; i++) {
+		const x = 95 + ((width - 50 - 90) / filteredData.length) * i;
+		const date = filteredData[i].getDate();
+		dateCoordinates.push({ x, date });
+	  }
+
+	console.log("sleep max" + sleepMax);
 	noStroke();
 	fill(0);
 
@@ -385,8 +391,8 @@ function draw() {
 		push();
 		translate(0, height - 50 - ((height - 100) / (sleepMax / 2000)) * i);
 		stroke(0);
-		line(width - 40, 0, width - 50, 0);
-
+		line(750, 0, 760, 0);
+		
 		noStroke();
 	fill(0);
 		text(i * 2 + "00", 962, -3);
@@ -448,17 +454,7 @@ function draw() {
 		pop();
 	}
 
-		 // store the x and y-coordinates of the dates
-		 for (let i = 0; i < filteredData.length; i++) {
-			const x = 95 + ((width - 50 - 90) / filteredData.length) * i;
-			const date = filteredData[i].getDate();
-
-			const y = height - 50 - filteredData[i].getHRV() * (height - 100) / hrvRange;
-
-			dateCoordinates.push({ x, y, date });
-		  }
-
-	//draw hrv data points
+	//draw hrv data points 
 	// for (var i = 0; i < allDataArray.length; i++) {
 	// 	push();
 	// 	circle(95 + ((width - 50 - 90) / allDataArray.length) * i, height - 50-(((height - 100) / hrvRange) * (parseInt(allDataArray[i].getHRV()) - hrvMin)) , 5);
@@ -537,24 +533,24 @@ if (document.getElementById('toggle-weight').checked) {
 	// 	  line(0, 5, -(height-100),5 ); // Draw the vertical line
 	// 	  pop(); // Restore the canvas state
 	// 	}
-
+		
 	// }
 	for (var i = 0; i < filteredData.length; i++) {
 		if (parseInt(filteredData[i].dosage) > 0) {
 			let x = 95 + ((width - 50 - 90) / filteredData.length) * i; // X-coordinate for text
 			let y = height - 50 - (height - 100); // Y-coordinate for text
-
+	
 			push(); // Save the current canvas state
 			translate(x, height - 50); // Translate to the center of the line
 			stroke(150); // Set stroke color to gray
 			strokeWeight(2); // Set thickness of the line
-
+	
 			for (let yDash = 0; yDash < height - 100; yDash += 10) {
 				line(0, -yDash, 0, -(yDash + 5)); // Draw dashed line segments with negative y values to move higher up
 			}
-
+	
 			pop(); // Restore the canvas state
-
+	
 			// Draw text
 			fill(0); // Set fill color to black
 			noStroke(); // Remove stroke
@@ -562,8 +558,8 @@ if (document.getElementById('toggle-weight').checked) {
 			text(filteredData[i].dosage+ " mg", x, y); // Draw dosage value
 		}
 	}
-
-
+	
+	
 
 
 	// beginShape();
@@ -582,10 +578,8 @@ if (document.getElementById('toggle-weight').checked) {
 
 	let minX = min(filteredData.map(entry => entry.date.getTime()));
 	let maxX = max(filteredData.map(entry => entry.date.getTime()));
-	// let minY = min(filteredData.map(entry => min(entry.deep, entry.light, entry.getHrv())));
-	// let maxY = max(filteredData.map(entry => max(entry.deep, entry.light, entry.getHrv())));
-	let minY = min(filteredData.map(entry => min(entry.deep, entry.light, entry.hrv)));
-	let maxY = max(filteredData.map(entry => max(entry.deep, entry.light, entry.hrv)));
+	let minY = min(filteredData.map(entry => min(entry.deep, entry.light, entry.getHrv())));
+	let maxY = max(filteredData.map(entry => max(entry.deep, entry.light, entry.getHrv())));
 
 	// map data points to canvas coordinates
 	let mapX = scaleLinear()
@@ -610,163 +604,35 @@ if (document.getElementById('toggle-weight').checked) {
 
 // line graph hover interaction:
 
-// Helper function to get the mouse position relative to an element
-function getMousePosition(event, element) {
-	const rect = element.getBoundingClientRect();
-	return {
-	  x: event.clientX - rect.left,
-	  y: event.clientY - rect.top
-	};
+function mouseMoved() {
+	mouseMovedOverGraph();
   }
+  
+  function mouseMoved() {
+	const summaryData = document.getElementById('summary-data');
+	summaryData.innerHTML = ''; // Clear the previous data
 
-  // Helper function to calculate the distance between two points
-  function calculateDistance(x1, y1, x2, y2) {
-	const xDiff = x2 - x1;
-	const yDiff = y2 - y1;
-	return Math.sqrt(xDiff * xDiff + yDiff * yDiff);
-  }
-
-  // Hover functionality
-  const graphContainer = document.getElementById('main-sketch-area');
-  const summaryData = document.getElementById('summary-data');
-  graphContainer.addEventListener('mousemove', mouseMoved);
-
-  function mouseMoved(event) {
-	const { x, y } = getMousePosition(event, graphContainer);
-
-	// Clear the previous data
-	summaryData.innerHTML = '';
-
-	// Find the closest date coordinate to the mouse position
-	let closestDate = null;
-	let closestDistance = Infinity;
-
-	for (const { x: dateX, y: dateY, date } of dateCoordinates) {
-	  const distance = calculateDistance(x, y - 220, dateX, dateY);
-	  if (distance < closestDistance) {
-		closestDate = date;
-		closestDistance = distance;
-	  }
-	}
-
-	// If a close enough date coordinate was found, update the summary data
-	if (closestDistance < 15) { // Use a fixed threshold for now
-	  const entry = filteredData.find(e => e.getDate().getTime() === closestDate.getTime());
-	  if (entry) {
+	// Check if the mouse is over any of the date coordinates
+	for (const { x, date } of dateCoordinates) {
+		const distanceFromDate = dist(mouseX, mouseY, x, height - 50);
+		if (distanceFromDate < 10) { // Adjust this value as needed
+		const entry = filteredData[filteredData.findIndex(e => e.getDate().getTime() === date.getTime())];
 		const hrv = entry.getHRV();
 		const weight = entry.weight;
 		const sleep = entry.getSleep();
-		const dateStr = `${closestDate.getMonth() + 1}/${closestDate.getDate()}/${closestDate.getFullYear()}`;
+		const dateStr = `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
 		const dataHTML = `
-		  <p><strong>Date:</strong> ${dateStr}</p>
-		  <p><strong>HRV:</strong> ${hrv}</p>
-		  <p><strong>Weight:</strong> ${weight}</p>
-		  <p><strong>Sleep:</strong> ${sleep}</p>
+			<p><strong>Date:</strong> ${dateStr}</p>
+			<p><strong>HRV:</strong> ${hrv}</p>
+			<p><strong>Weight:</strong> ${weight}</p>
+			<p><strong>Sleep:</strong> ${sleep}</p>
 		`;
 		summaryData.innerHTML = dataHTML;
-	  }
+		break;
+		}
 	}
-  }
-//function mouseMoved() {
-//	mouseMovedOverGraph();
-// }
-
-  //use x position cursor within the space
-  //divide the width by bars
-
-//   function calculateDistance(x1, y1, x2, y2) {
-// 	const xDiff = x2 - x1;
-// 	const yDiff = y2 - y1;
-// 	return Math.sqrt(xDiff * xDiff + yDiff * yDiff);
-//   }
-
-// const graphContainer = document.getElementById('main-sketch-area');
-// const summaryData = document.getElementById('summary-data');
-
-// console.log('graphContainer:', graphContainer);
-// console.log('summaryData:', summaryData);
-
-// graphContainer.addEventListener('mousemove', mouseMoved);
-
-// // var dateLength = dates.length;
-
-// function mouseMoved(event) {
-//   mouseX = event.clientX;
-//   mouseY = event.clientY;
-
-//   const graphContainerRect = graphContainer.getBoundingClientRect();
-//   console.log('graphContainer width:', graphContainerRect.width);
-//   console.log('graphContainer height:', graphContainerRect.height);
-
-//   // clear the previous data
-//   summaryData.innerHTML = '';
-
-// //   var endDate = endDate.setMonth(0);
-// //   endDate.setDate(17);
-// //   endDate.setFullYear(2024);
-
-// //   var startDate = startDate.setMonth(10);
-// //   startDate.setDate(8);
-// //   startDate.setFullYear(2023);
-
-// 	// var endDate = Date()
-// 	// console.log(dateCoordinates.length);
-//   // Check if the mouse is over any of the date coordinates
-//   for (const { x, y, date } of dateCoordinates) {
-// 	// console.log('dateCoordinates:', dateCoordinates);
-// 	// console.log('filteredData:', filteredData);
-//     const distanceFromDate = calculateDistance(mouseX, mouseY, x, y);
-// 	console.log('mouseX:', mouseX, 'mouseY:', mouseY, 'x:', x, 'y:', y, 'distanceFromDate:', distanceFromDate);
-
-// 	// var monthDiff = Math.abs(endDate.getMonth() - startDate.getMonth());
-// 	// var dayDiff = Math.abs(endDate.getDate() - startDate.getDate());
-// 	// var totalDiff = (monthDiff + 1) * dayDiff;
-// 	// console.log(totalDiff);
-// 	// distance = 2840 / dateLength;
-
-//     if (distanceFromDate < dateCoordinates.length) {
-//       // Adjust this value as needed
-//       const entry = filteredData[filteredData.findIndex(e => e.getDate().getTime() === date.getTime())];
-// 	  if(entry){
-// 		const hrv = entry.getHRV();
-// 		const weight = entry.weight;
-// 		const sleep = entry.getSleep();
-// 		const dateStr = `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
-// 		const dataHTML = `
-// 		  <p><strong>Date:</strong> ${dateStr}</p>
-// 		  <p><strong>HRV:</strong> ${hrv}</p>
-// 		  <p><strong>Weight:</strong> ${weight}</p>
-// 		  <p><strong>Sleep:</strong> ${sleep}</p>
-// 		`;
-// 		summaryData.innerHTML = dataHTML;
-// 		break;
-// 	  }
-//     }
-//   }
-// }
-	// const summaryData = document.getElementById('summary-data');
-	// summaryData.innerHTML = ''; // Clear the previous data
-
-	// // Check if the mouse is over any of the date coordinates
-	// for (const { x, date } of dateCoordinates) {
-	// 	const distanceFromDate = dist(mouseX, mouseY, x, height - 50);
-	// 	if (distanceFromDate < 10) { // Adjust this value as needed
-	// 	const entry = filteredData[filteredData.findIndex(e => e.getDate().getTime() === date.getTime())];
-	// 	const hrv = entry.getHRV();
-	// 	const weight = entry.weight;
-	// 	const sleep = entry.getSleep();
-	// 	const dateStr = `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
-	// 	const dataHTML = `
-	// 		<p><strong>DATE: </strong> ${dateStr}</p>
-	// 		<p><strong>HRV: </strong> ${hrv}</p>
-	// 		<p><strong>WEIGHT: </strong> ${weight}</p>
-	// 		<p><strong>SLEEP: </strong> ${sleep}</p>
-	// 	`;
-	// 	summaryData.innerHTML = dataHTML;
-	// 	break;
-	// 	}
 	// hoverBox.style('display', 'none'); // Initially hide the hover box
-
+  
 	// // Check if the mouse is over any of the date coordinates
 	// for (const { x, date } of dateCoordinates) {
 	//   const distanceFromDate = dist(mouseX, mouseY, x, height - 50);
@@ -782,6 +648,7 @@ function getMousePosition(event, element) {
 	// 	break;
 	//   }
   	//}
+  }
 
 // function to find the minimum value in an array
 function min(arr) {
@@ -824,5 +691,3 @@ function scaleLinear() {
 
 	return scale;
 }
-
-// Updating the card averages

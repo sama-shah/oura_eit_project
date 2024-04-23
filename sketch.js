@@ -391,7 +391,7 @@ function draw() {
 		push();
 		translate(0, height - 50 - ((height - 100) / (sleepMax / 2000)) * i);
 		stroke(0);
-		line(750, 0, 760, 0);
+		line(width-40, 0, width-50, 0);
 		
 		noStroke();
 	fill(0);
@@ -604,9 +604,9 @@ if (document.getElementById('toggle-weight').checked) {
 
 // line graph hover interaction:
 
-function mouseMoved() {
-	mouseMovedOverGraph();
-  }
+// function mouseMoved() {
+// 	mouseMovedOverGraph();
+//   }
   
   function mouseMoved() {
 	const summaryData = document.getElementById('summary-data');
@@ -631,6 +631,10 @@ function mouseMoved() {
 		break;
 		}
 	}
+
+
+
+	  
 	// hoverBox.style('display', 'none'); // Initially hide the hover box
   
 	// // Check if the mouse is over any of the date coordinates

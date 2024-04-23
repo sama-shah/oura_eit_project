@@ -350,7 +350,7 @@ function draw() {
 	translate(width - 20, height / 2);
 	rotate(-HALF_PI);
 	noStroke();
-	fill("#2F66B9");
+	fill("#3268ba");
 	text("Sleep Duration (s)", 0, 0);
 	pop();
 
@@ -407,7 +407,7 @@ function draw() {
 	stroke(0); // Set the stroke color to black (you can change this value)
 	strokeWeight(1); // Set the stroke weight (thickness) of the bars
 	noStroke();
-	fill("#ADD8E6");
+	fill("#9cbbe8");
 	for (var i = 0; i < filteredData.length; i++) {
 		let x = 90 + ((width - 50 - 90) / filteredData.length) * i;
 		let y = height - 50 - (((height - 100) / sleepMax) * (parseInt(filteredData[i].getSleep())));
@@ -416,7 +416,7 @@ function draw() {
 
 		if (document.getElementById('toggle-sleep').checked) {
 			noStroke();
-			fill("#ADD8E6");
+			fill("#9cbbe8");
 
 			// Draw a rectangle for each bar
 			rect(x, y, barWidth, barHeight);
